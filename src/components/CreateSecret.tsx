@@ -1,5 +1,4 @@
 'use client';
-import { randomBytes } from 'crypto';
 import { useState, useEffect } from 'react';
 import { clipboardSvg, copiedSvg } from './Icons';
 import Button from './Button';
@@ -12,7 +11,11 @@ export default function CreateSecret() {
 
   const createSecret = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const secret = randomBytes(32).toString('hex');
+    const array = new Uint8Array(32);
+    crypto.getRandomValues(array);
+    const secret = Array.from(array)
+      .map((byte) => byte.toString(16).padStart(2, '0'))
+      .join('');
     setSecret(secret);
     setSvg(clipboardSvg);
   };

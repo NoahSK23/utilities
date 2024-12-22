@@ -41,6 +41,8 @@ export default function StorageConverter() {
         <form onSubmit={handleSubmit} className="mb-4">
           <input
             type="number"
+            min="0"
+            step="0.01"
             name="storage"
             id="storage"
             placeholder="Enter storage size"

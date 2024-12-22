@@ -45,6 +45,8 @@ export default function CmToFeetInchConvert() {
           </label>
           <input
             type="number"
+            min="0"
+            step="0.01"
             id="cm"
             name="cm"
             required
