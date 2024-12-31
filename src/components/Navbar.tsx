@@ -41,7 +41,7 @@ export default function NavBar() {
   const links = [
     { name: 'Home', href: '/' },
     { name: 'Converter', href: '/converter' },
-    { name: 'Cm to Feet and Inches', href: '/cm-feetinch' },
+    { name: 'Cm \u2192 Feet and Inches', href: '/cm-feetinch' },
     { name: 'Hello', href: '/hello' },
     { name: 'Create Secret', href: '/create-secret' },
     { name: 'Dinner Calculator', href: '/dinner-calculator' },
