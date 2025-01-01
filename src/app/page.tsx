@@ -2,8 +2,8 @@ import Accordion from '@/components/Accordion';
 import { createSEOMetadata } from '@/lib/createSEOMetadata';
 
 export const metadata = createSEOMetadata({
-  title: 'Home | Noah S Klinger',
-  description: 'Noah S Klinger website - Homepage',
+  title: "Home | Noah's Utilities",
+  description: 'Noah S Klinger Utilities - Homepage',
 });
 
 export default function Home() {
