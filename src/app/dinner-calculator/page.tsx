@@ -1,4 +1,3 @@
-import Button from '@/components/Button';
 import { createSEOMetadata } from '@/lib/createSEOMetadata';
 import { Metadata } from 'next';
 
