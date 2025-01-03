@@ -40,7 +40,7 @@ export default function NavBar() {
 
   const links = [
     { name: 'Home', href: '/' },
-    { name: 'Converter', href: '/converter' },
+    { name: 'Storage Converter', href: '/converter' },
     { name: 'Cm \u2192 Feet and Inches', href: '/cm-feetinch' },
     { name: 'Hello', href: '/hello' },
     { name: 'Create Secret', href: '/create-secret' },

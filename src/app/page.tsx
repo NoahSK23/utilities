@@ -16,7 +16,7 @@ export default function Home() {
         <Accordion title="About - What is this site for?" id="accordion-0">
           <p className="whitespace-pre-line">
             {
-              "This site is a personal website for me, Noah S Klinger.\n I will be updating this when I need utilities that I can't find online. \nThis site is built with Next.js and Tailwind CSS."
+              "This site is a personal website for me, Noah S Klinger.\n I will be updating this when I need utilities that I can't find online. \nThis site is built with Next.js and Tailwind CSS using a static export."
             }
           </p>
         </Accordion>

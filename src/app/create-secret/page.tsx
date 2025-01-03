@@ -5,7 +5,7 @@ import { Metadata } from 'next';
 export const metadata: Metadata = createSEOMetadata({
   title: 'Create Secret',
   description:
-    'Creates a secret to be used with anything that needs a secret (e.g. JWT). It uses the command: crypto.randomBytes(32).toString("hex")',
+    'Creates a long string of characters to be used with anything that needs a secret (e.g. JWT). It uses built in browser APIs',
 });
 
 export default async function CreateSecretPage() {
