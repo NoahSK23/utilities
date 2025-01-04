@@ -35,7 +35,7 @@ export default function StorageConverter() {
   };
 
   return (
-    <>
+    <div className="p-4">
       <h1 className="mb-4 text-center text-4xl font-bold">Storage Converter</h1>
       <Section>
         <form onSubmit={handleSubmit} className="mb-4">
@@ -55,7 +55,7 @@ export default function StorageConverter() {
               <input
                 type="radio"
                 name="conversionType"
-                id="conversionType"
+                id="conversionTypeGbToGib"
                 value="gibToGb"
                 defaultChecked
                 className="form-radio"
@@ -68,7 +68,7 @@ export default function StorageConverter() {
               <input
                 type="radio"
                 name="conversionType"
-                id="conversionType"
+                id="conversionTypeGibToGb"
                 value="gbToGib"
                 className="form-radio"
               />
@@ -93,6 +93,6 @@ export default function StorageConverter() {
           </div>
         ) : null}
       </Section>
-    </>
+    </div>
   );
 }
