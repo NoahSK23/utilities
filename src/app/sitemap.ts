@@ -1,32 +1,39 @@
-import type { MetadataRoute } from 'next';
+import { MetadataRoute } from 'next';
+import path from 'path';
+import fs from 'fs/promises'; // Use the async fs API
 
 export const dynamic = 'force-static';
 
-export default function sitemap(): MetadataRoute.Sitemap {
-  return [
-    {
-      url: 'https://noahsk23.github.io/utilities',
-      priority: 1,
-    },
-    {
-      url: 'https://noahsk23.github.io/utilities/create-secret',
-      priority: 0.8,
-    },
-    {
-      url: 'https://noahsk23.github.io/utilities/converter',
-      priority: 0.8,
-    },
-    {
-      url: 'https://noahsk23.github.io/utilities/cm-feetinch',
-      priority: 0.8,
-    },
-    {
-      url: 'https://noahsk23.github.io/utilities/dinner-calculator',
-      priority: 0.5,
-    },
-    {
-      url: 'https://noahsk23.github.io/utilities/hello',
-      priority: 0.4,
-    },
-  ];
+const BASE_URL = 'https://noahsk23.github.io/utilities';
+
+// Recursively read directories to find all page.tsx files
+async function getStaticPaths(dir: string, basePath = ''): Promise<string[]> {
+  const entries = await fs.readdir(dir, { withFileTypes: true });
+  const paths: Set<string> = new Set();
+
+  for (const entry of entries) {
+    const fullPath = path.join(dir, entry.name);
+    if (entry.isDirectory()) {
+      const subPaths = await getStaticPaths(
+        fullPath,
+        `${basePath}/${entry.name}`
+      );
+      subPaths.forEach((subPath) => paths.add(subPath));
+    } else if (entry.name === 'page.tsx') {
+      paths.add(basePath || '/'); // Ensure basePath is always included
+    }
+  }
+
+  return Array.from(paths);
+}
+
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const appDir = path.join(process.cwd(), 'src/app'); // Use `app` folder directly
+  const staticPaths = await getStaticPaths(appDir);
+
+  return staticPaths.map((page) => ({
+    url: `${BASE_URL}${page}`,
+    lastModified: new Date().toISOString(),
+    priority: page !== '/' ? 0.8 : 1.0,
+  }));
 }
