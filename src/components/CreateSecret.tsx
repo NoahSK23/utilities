@@ -59,7 +59,7 @@ export default function CreateSecret() {
         </p>
         <div className="rounded-md bg-slate-900 text-white">
           <Accordion title="View the code 👇">
-            <code className="block whitespace-pre rounded-lg bg-slate-900 p-4 text-sm text-white">
+            <code className="block whitespace-pre rounded-lg p-4 text-sm text-white">
               {`const array = new Uint8Array(32);
   crypto.getRandomValues(array);
   const secret = Array.from(array)
