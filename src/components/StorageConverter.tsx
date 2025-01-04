@@ -38,7 +38,7 @@ export default function StorageConverter() {
     <div className="p-4">
       <h1 className="mb-4 text-center text-4xl font-bold">Storage Converter</h1>
       <Section>
-        <form onSubmit={handleSubmit} className="mb-4">
+        <form onSubmit={handleSubmit} className="mb-3">
           <input
             type="number"
             min="0"
@@ -47,10 +47,10 @@ export default function StorageConverter() {
             id="storage"
             placeholder="Enter storage size"
             required
-            className="focus:shadow-outline w-full appearance-none rounded border px-3 py-2 leading-tight text-neutral-700 shadow focus:outline-none"
+            className="focus:shadow-outline mb-3 w-full appearance-none rounded border px-3 py-2 leading-tight text-neutral-700 shadow focus:outline-none"
           />
 
-          <div className="mb-4">
+          <div className="mb-2">
             <label className="inline-flex items-center">
               <input
                 type="radio"
@@ -77,17 +77,17 @@ export default function StorageConverter() {
               </span>
             </label>
           </div>
-          <div className="mb-4">
+          <div className="mb-3">
             <Button type="submit">Convert</Button>
           </div>
         </form>
         {result && !error ? (
-          <div className="result mt-4">
+          <div className="result mt-3">
             <strong>Result:</strong>{' '}
             <span className="text-green-600">{result}</span>
           </div>
         ) : error ? (
-          <div className="result mt-4">
+          <div className="result mt-3">
             <strong className="text-red-500">Error:</strong>{' '}
             <span className="text-red-500">Please enter a valid number</span>
           </div>
