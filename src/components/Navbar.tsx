@@ -10,12 +10,12 @@ export default function NavBar() {
   const closeSidebar = () => setIsSidebarOpen(false);
 
   useEffect(() => {
-    const handleOutsideClick = (event: any) => {
-      if (isSidebarOpen && !event.target.closest('aside')) {
+    const handleOutsideClick = (event: MouseEvent) => {
+      if (isSidebarOpen && !(event.target as Element).closest('aside')) {
         closeSidebar();
       }
     };
-    const handleEscapeKey = (event: any) => {
+    const handleEscapeKey = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
         closeSidebar();
       }
@@ -40,7 +40,7 @@ export default function NavBar() {
 
   const links = [
     { name: 'Home', href: '/' },
-    { name: 'Converter', href: '/converter' },
+    { name: 'Storage Converter', href: '/converter' },
     { name: 'Cm \u2192 Feet and Inches', href: '/cm-feetinch' },
     { name: 'Hello', href: '/hello' },
     { name: 'Create Secret', href: '/create-secret' },

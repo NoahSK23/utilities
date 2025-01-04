@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import { clipboardSvg, copiedSvg } from './Icons';
 import Button from './Button';
+import Accordion from './Accordion';
 
 export default function CreateSecret() {
   const [secret, setSecret] = useState('');
@@ -53,11 +54,22 @@ export default function CreateSecret() {
       >
         <p className="whitespace-pre-line px-3 text-center">
           {
-            "Creates a secret to be used with anything that needs a secret (e.g. JWT).\nIt uses the command: crypto.randomBytes(32).toString('hex')"
+            'Generates a secure secret for the use in applications requiring one (e.g. JWT).\nIt uses built in browser APIs'
           }
         </p>
+        <div className="rounded-md bg-slate-900 text-white">
+          <Accordion title="View the code 👇">
+            <code className="block whitespace-pre rounded-lg bg-slate-900 p-4 text-sm text-white">
+              {`const array = new Uint8Array(32);
+  crypto.getRandomValues(array);
+  const secret = Array.from(array)
+  .map((byte) => byte.toString(16).padStart(2, '0'))
+  .join('');`}
+            </code>
+          </Accordion>
+        </div>
         <Button bgColor="bg-black" type="submit" className="w-fit">
-          Create Secret
+          Generate Secret
         </Button>
       </form>
       {secret ? (
