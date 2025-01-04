@@ -3,7 +3,7 @@ const nextConfig = {
   output: 'export',
   basePath: '/utilities',
   assetPrefix: '/utilities',
-  skipTrailingSlashRedirects: true,
+  skipTrailingSlashRedirect: true,
   typescript: {
     ignoreBuildErrors: true,
   },
