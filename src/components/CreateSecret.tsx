@@ -69,7 +69,7 @@ export default function CreateSecret() {
           </Accordion>
         </div>
         <Button bgColor="bg-black" type="submit" className="w-fit">
-          Generate Secret
+          {secret ? 'Generate another secret' : 'Generate secret'}
         </Button>
       </form>
       {secret ? (
