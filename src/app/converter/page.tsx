@@ -9,6 +9,7 @@ export const metadata: Metadata = createSEOMetadata({
 export default function StorageConverterPage() {
   return (
     <main className="flex min-h-[80vh] flex-col items-center justify-center">
+      <h1 className="text-center text-4xl font-bold">Storage Converter</h1>
       <StorageConverter />
     </main>
   );

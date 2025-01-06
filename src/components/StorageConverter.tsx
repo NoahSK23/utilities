@@ -36,8 +36,11 @@ export default function StorageConverter() {
 
   return (
     <div className="p-4">
-      <h1 className="mb-4 text-center text-4xl font-bold">Storage Converter</h1>
       <Section>
+        <p className="mb-2 text-center text-xl">
+          Windows measures storage differently (Base 2) than macOS and Linux
+          (Base 10). This can convert between the two.
+        </p>
         <form onSubmit={handleSubmit} className="mb-3">
           <input
             type="number"
