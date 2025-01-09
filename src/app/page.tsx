@@ -11,8 +11,11 @@ export default function Home() {
     <div className="grid min-h-screen grid-rows-[20px_1fr_20px] items-center justify-items-center gap-16 p-8 pb-20 font-sans sm:min-h-[80vh] sm:p-20">
       <main className="row-start-2 flex flex-col items-center gap-8 sm:items-start">
         <h1 className="flex flex-col items-center gap-4 text-center text-4xl font-extrabold sm:flex-row dark:text-neutral-300">
-          Welcome to my site! Use the nav links above to get started.
+          Welcome to my site, full useful utilities, mostly for me! 😎
         </h1>
+        <p className="flex flex-col items-center gap-4 text-center text-lg font-medium sm:flex-row dark:text-neutral-300">
+          Use the nav links above to get started.
+        </p>
         <Accordion title="About - What is this site for?" id="accordion-0">
           <p className="whitespace-pre-line">
             {
