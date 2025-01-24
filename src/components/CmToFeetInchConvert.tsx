@@ -51,7 +51,7 @@ export default function CmToFeetInchConvert() {
               id="cm"
               name="cm"
               required
-              className="mt-1 block w-full rounded-md border border-indigo-500 p-3 shadow-sm focus:ring-indigo-500 sm:text-sm"
+              className="mt-1 block w-full rounded-md border border-indigo-500 p-3 shadow-xs focus:ring-indigo-500 sm:text-sm"
               placeholder="Centimeters"
             />
             <Button
