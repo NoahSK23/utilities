@@ -68,7 +68,7 @@ export default function NavBar() {
             {links.map((link) => (
               <Link href={link.href} key={link.name}>
                 <span
-                  className={`rounded-md px-3 py-2 text-sm font-medium transition-all hover:bg-gray-600 focus:bg-gray-700 focus:text-white focus:outline-none dark:text-white ${
+                  className={`rounded-md px-3 py-2 text-sm font-medium transition-all hover:bg-gray-600 focus:bg-gray-700 focus:text-white focus:outline-hidden dark:text-white ${
                     pathname === link.href ? 'bg-gray-700 text-white' : ''
                   }`}
                 >

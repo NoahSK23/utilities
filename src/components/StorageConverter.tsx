@@ -50,7 +50,7 @@ export default function StorageConverter() {
             id="storage"
             placeholder="Enter storage size"
             required
-            className="focus:shadow-outline mb-3 w-full appearance-none rounded border px-3 py-2 leading-tight text-neutral-700 shadow focus:outline-none"
+            className="focus:shadow-outline mb-3 w-full appearance-none rounded-sm border px-3 py-2 leading-tight text-neutral-700 shadow-sm focus:outline-hidden"
           />
 
           <div className="mb-2">

@@ -22,7 +22,7 @@ export default function Accordion({
   }, [active]);
 
   return (
-    <div className="w-full rounded-md border border-neutral-800 p-2 px-3 transition-colors hover:border-neutral-700 hover:shadow dark:border-neutral-600 dark:hover:border-neutral-500 dark:hover:bg-neutral-900">
+    <div className="w-full rounded-md border border-neutral-800 p-2 px-3 transition-colors hover:border-neutral-700 hover:shadow-sm dark:border-neutral-600 dark:hover:border-neutral-500 dark:hover:bg-neutral-900">
       <h2 className="text-2xl font-semibold">
         <button
           className="flex w-full items-center justify-between py-2 text-left font-semibold"
@@ -45,14 +45,14 @@ export default function Accordion({
               width="16"
               height="2"
               rx="1"
-              className={`origin-center transform transition duration-200 ease-out ${accordionOpen && '!rotate-180'}`}
+              className={`origin-center transform transition duration-200 ease-out ${accordionOpen && 'rotate-180!'}`}
             />
             <rect
               y="7"
               width="16"
               height="2"
               rx="1"
-              className={`origin-center rotate-90 transform transition duration-200 ease-out ${accordionOpen && '!rotate-180'}`}
+              className={`origin-center rotate-90 transform transition duration-200 ease-out ${accordionOpen && 'rotate-180!'}`}
             />
           </svg>
         </button>
