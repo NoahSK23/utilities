@@ -32,6 +32,7 @@ export default function Accordion({
           }}
           aria-expanded={accordionOpen}
           aria-controls={`accordion-text-${id}`}
+          style={{ cursor: 'pointer' }}
         >
           <span>{title}</span>
           <svg
