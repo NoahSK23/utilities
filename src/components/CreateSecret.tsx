@@ -52,14 +52,14 @@ export default function CreateSecret() {
         onSubmit={createSecret}
         className="flex flex-col items-center justify-center gap-4"
       >
-        <p className="whitespace-pre-line px-3 text-center">
+        <p className="px-3 text-center whitespace-pre-line">
           {
             'Generates a secure secret for the use in applications requiring one (e.g. JWT).\nIt uses built in browser APIs'
           }
         </p>
         <div className="rounded-md bg-slate-900 text-white">
           <Accordion title="View the code 👇">
-            <code className="block whitespace-pre rounded-lg p-4 text-sm text-white">
+            <code className="block rounded-lg p-4 text-sm whitespace-pre text-white">
               {`const array = new Uint8Array(32);
   crypto.getRandomValues(array);
   const secret = Array.from(array)
@@ -74,7 +74,7 @@ export default function CreateSecret() {
       </form>
       {secret ? (
         <div className="flex gap-4 rounded-lg bg-slate-900 p-4">
-          <p className="break-all text-sm leading-10 text-white">{secret}</p>
+          <p className="text-sm leading-10 break-all text-white">{secret}</p>
           <button
             className="rounded-lg bg-gray-700 p-2 text-white"
             onClick={copyToClipboard}

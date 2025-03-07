@@ -82,11 +82,11 @@ export default function NavBar() {
 
       {/* Mobile Sidebar */}
       <div
-        className={`fixed inset-0 z-50 bg-black bg-opacity-50 transition-opacity ${isSidebarOpen ? 'opacity-100' : 'pointer-events-none opacity-0'}`}
+        className={`bg-opacity-50 fixed inset-0 z-50 bg-black transition-opacity ${isSidebarOpen ? 'opacity-100' : 'pointer-events-none opacity-0'}`}
         onClick={closeSidebar}
       >
         <aside
-          className={`fixed right-0 top-0 z-50 h-full w-64 transform bg-gray-800 text-white transition-transform ${isSidebarOpen ? 'translate-x-0' : 'translate-x-full'}`}
+          className={`fixed top-0 right-0 z-50 h-full w-64 transform bg-gray-800 text-white transition-transform ${isSidebarOpen ? 'translate-x-0' : 'translate-x-full'}`}
           onClick={(e) => e.stopPropagation()}
         >
           <div className="flex justify-end">
