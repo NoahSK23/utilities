@@ -2,6 +2,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { GithubSolid } from './Icons';
 
 export default function NavBar() {
   const pathname = usePathname();
@@ -77,6 +78,14 @@ export default function NavBar() {
               </Link>
             ))}
           </div>
+          <a
+            className="ml-auto hidden items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-all hover:bg-gray-600 focus:bg-gray-700 focus:text-white focus:outline-hidden md:flex dark:text-white"
+            href="https://github.com/noahsk23/utilities"
+            target="_blank"
+            rel="noreferrer"
+          >
+            {GithubSolid} View source on Github
+          </a>
         </div>
       </nav>
 
@@ -117,6 +126,14 @@ export default function NavBar() {
               </span>
             </Link>
           ))}
+          <a
+            className="flex items-center justify-end gap-2 px-3 py-2 text-end text-sm font-medium transition-all hover:bg-gray-200 hover:text-black"
+            href="https://github.com/noahsk23/utilities"
+            target="_blank"
+            rel="noreferrer"
+          >
+            {GithubSolid} View source on Github
+          </a>
         </aside>
       </div>
     </>
