@@ -3,8 +3,9 @@ import { createSEOMetadata } from '@/lib/createSEOMetadata';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = createSEOMetadata({
-  title: 'Convert CM -> Feet & Inches',
-  description: 'Convert from centimeters to feet and inches',
+  title: 'Measurement Converter',
+  description:
+    'Convert from centimeters to feet and inches and inches to feet and inches',
 });
 
 export default function CmToFeetAndInches() {
