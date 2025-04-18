@@ -42,18 +42,7 @@ export default function StorageConverter() {
           (Base 10). This can convert between the two.
         </p>
         <form onSubmit={handleSubmit} className="mb-3">
-          <input
-            type="number"
-            min="0"
-            step="0.01"
-            name="storage"
-            id="storage"
-            placeholder="Enter storage size"
-            required
-            className="focus:shadow-outline mb-3 w-full appearance-none rounded-sm border px-3 py-2 leading-tight text-neutral-700 shadow-sm focus:outline-hidden"
-          />
-
-          <div className="mb-2">
+          <div className="mb-2 flex flex-col flex-nowrap gap-6 sm:flex-row">
             <label className="inline-flex items-center">
               <input
                 type="radio"
@@ -80,6 +69,16 @@ export default function StorageConverter() {
               </span>
             </label>
           </div>
+          <input
+            type="number"
+            min="0"
+            step="0.01"
+            name="storage"
+            id="storage"
+            placeholder="Enter storage size"
+            required
+            className="focus:shadow-outline mb-3 w-full appearance-none rounded-sm border px-3 py-2 leading-tight text-neutral-700 shadow-sm focus:outline-hidden"
+          />
           <div className="mb-3">
             <Button type="submit">Convert</Button>
           </div>

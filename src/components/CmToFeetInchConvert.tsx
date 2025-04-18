@@ -36,78 +36,79 @@ export default function CmToFeetInchConvert() {
 
   return (
     <div className="p-4">
+      <h1 className="mb-2 text-center text-3xl font-bold">
+        {conversionType === 'cm'
+          ? 'CM to Feet and Inches'
+          : 'Inches to Feet and Inches'}
+      </h1>
       <Section>
-        <div className="p-4">
-          <h1 className="text-3xl font-bold">
-            {conversionType === 'cm'
-              ? 'CM to Feet and Inches'
-              : 'Inches to Feet and Inches'}
-          </h1>
-          <p className="text-lg">Convert measurements to feet and inches.</p>
-          <form
-            onSubmit={convertToFeetAndInches}
-            className="flex flex-col gap-2"
-          >
-            {/* Radio selection */}
-            <div className="mb-2 flex gap-4">
-              <label className="flex items-center gap-1">
-                <input
-                  type="radio"
-                  name="conversionType"
-                  value="cm"
-                  checked={conversionType === 'cm'}
-                  onChange={(e) => {
-                    setConversionType(e.target.value as 'cm' | 'inches');
-                    setAnswer(''); // Clear result on conversion type change
-                  }}
-                  className="h-4 w-4"
-                />
-                Centimeters
-              </label>
-              <label className="flex items-center gap-1">
-                <input
-                  type="radio"
-                  name="conversionType"
-                  value="inches"
-                  checked={conversionType === 'inches'}
-                  onChange={(e) => {
-                    setConversionType(e.target.value as 'cm' | 'inches');
-                    setAnswer(''); // Clear result on conversion type change
-                  }}
-                  className="h-4 w-4"
-                />
-                Inches
-              </label>
-            </div>
-            {/* Input field */}
-            <label
-              className="block text-sm font-medium text-gray-700"
-              htmlFor="value"
-            >
-              {conversionType === 'cm' ? 'Centimeters:' : 'Inches:'}
+        <p className="mb-2 text-center text-xl">
+          Convert measurements to feet and inches.
+        </p>
+        <form onSubmit={convertToFeetAndInches} className="mb-3">
+          <div className="mb-2 flex gap-4">
+            <label className="inline-flex items-center">
+              <input
+                type="radio"
+                name="conversionType"
+                value="cm"
+                checked={conversionType === 'cm'}
+                onChange={(e) => {
+                  setConversionType(e.target.value as 'cm' | 'inches');
+                  setAnswer('');
+                }}
+                className="form-radio"
+              />
+              <span className="ml-2">Centimeters</span>
             </label>
-            <input
-              type="number"
-              min="0"
-              step="0.01"
-              id="value"
-              name="value"
-              required
-              className="mt-1 block w-full rounded-md border border-indigo-500 p-3 shadow-xs focus:ring-indigo-500 sm:text-sm"
-              placeholder={conversionType === 'cm' ? 'Centimeters' : 'Inches'}
-            />
-            <Button
-              bgColor="bg-indigo-500"
-              type="submit"
-              className="mt-2 w-fit"
-            >
+            <label className="inline-flex items-center">
+              <input
+                type="radio"
+                name="conversionType"
+                value="inches"
+                checked={conversionType === 'inches'}
+                onChange={(e) => {
+                  setConversionType(e.target.value as 'cm' | 'inches');
+                  setAnswer('');
+                }}
+                className="form-radio"
+              />
+              <span className="ml-2">Inches</span>
+            </label>
+          </div>
+          <label
+            className="block text-sm font-medium text-gray-700"
+            htmlFor="value"
+          >
+            {conversionType === 'cm' ? 'Centimeters:' : 'Inches:'}
+          </label>
+          <input
+            type="number"
+            min="0"
+            step="0.01"
+            id="value"
+            name="value"
+            required
+            className="focus:shadow-outline mb-3 w-full appearance-none rounded-sm border px-3 py-2 leading-tight text-neutral-700 shadow-sm focus:outline-hidden"
+            placeholder={conversionType === 'cm' ? 'Centimeters' : 'Inches'}
+          />
+          <div className="mb-3">
+            <Button type="submit" className="w-fit">
               Convert
             </Button>
-          </form>
-          {answer && (
-            <p className="mt-4 text-sm font-semibold text-red-500">{answer}</p>
-          )}
-        </div>
+          </div>
+        </form>
+        {answer && answer !== 'Please enter a valid number' ? (
+          <div className="result mt-3">
+            <strong>Result:</strong>{' '}
+            <span className="text-green-600">{answer}</span>
+          </div>
+        ) : answer === 'Please enter a valid number' ? (
+          <div className="result mt-3">
+            <strong className="text-red-500">Error:</strong>{' '}
+            <span className="text-red-500">{answer}</span>
+          </div>
+        ) : null}
       </Section>
     </div>
   );

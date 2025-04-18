@@ -6,7 +6,7 @@ export default function Section({ children, ...props }: Props) {
   return (
     <section
       {...props}
-      className="mx-auto max-w-md overflow-hidden rounded-xl bg-white p-4 text-black shadow-2xl md:max-w-2xl"
+      className="mx-auto max-w-2xl overflow-hidden rounded-xl bg-white p-6 text-black shadow-2xl md:max-w-3xl"
     >
       {children}
     </section>
