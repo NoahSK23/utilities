@@ -1,4 +1,4 @@
-import Accordion from '@/components/Accordion';
+import FeaturedGrid from '@/components/featuredGrid';
 import { createSEOMetadata } from '@/lib/createSEOMetadata';
 
 export const metadata = createSEOMetadata({
@@ -8,22 +8,50 @@ export const metadata = createSEOMetadata({
 
 export default function Home() {
   return (
-    <div className="grid min-h-screen grid-rows-[20px_1fr_20px] items-center justify-items-center gap-16 p-8 pb-20 font-sans sm:min-h-[80vh] sm:p-20">
-      <main className="row-start-2 flex flex-col items-center gap-8 sm:items-start">
-        <h1 className="flex flex-col items-center gap-4 text-center text-4xl font-extrabold sm:flex-row dark:text-neutral-300">
-          Welcome to my site, full useful utilities, mostly for me! 😎
-        </h1>
-        <p className="flex flex-col items-center gap-4 text-center text-lg font-medium sm:flex-row dark:text-neutral-300">
-          Use the nav links above to get started.
-        </p>
-        <Accordion title="About - What is this site for?" id="accordion-0">
-          <p className="whitespace-pre-line">
-            {
-              "This site is a personal website for me, Noah S Klinger.\n I will be updating this when I need utilities that I can't find online. \nThis site is built with Next.js and Tailwind CSS using a static export."
-            }
+    <div className="min-h-screen bg-gradient-to-b from-slate-200 to-slate-300 dark:from-slate-900 dark:to-slate-950">
+      {/* Hero Section */}
+      <section className="px-6 py-24 sm:py-32 lg:px-8">
+        <div className="mx-auto max-w-2xl text-center">
+          <h1 className="animate-fade-in bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-4xl font-bold tracking-tight text-transparent sm:text-6xl">
+            Useful Utilities
+          </h1>
+          <p className="mt-6 text-lg leading-8 text-gray-600 dark:text-gray-300">
+            A collection of tools and utilities built by Noah S Klinger
           </p>
-        </Accordion>
-      </main>
+          <div className="mt-10 flex items-center justify-center gap-x-6">
+            <a
+              href="#featured-tools"
+              className="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm transition-all hover:bg-indigo-500 hover:shadow-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+            >
+              View Available Tools
+            </a>
+          </div>
+        </div>
+      </section>
+
+      {/* Features Grid */}
+      <section
+        id="featured-tools"
+        className="mx-auto max-w-7xl px-6 pb-24 lg:px-8"
+      >
+        <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+          <FeaturedGrid
+            tool="Storage Converter"
+            description="Convert between different units and formats"
+            link="/converter"
+          />
+          <FeaturedGrid
+            tool="Measurement Converter"
+            description="Perform measurement conversions easily"
+            link="/cm-feetinch"
+          />
+          <FeaturedGrid
+            tool="Create secret"
+            description="Create a secret key"
+            link="/create-secret"
+          />
+        </div>
+      </section>
     </div>
   );
 }
