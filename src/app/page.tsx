@@ -1,5 +1,6 @@
 import FeaturedGrid from '@/components/featuredGrid';
 import { createSEOMetadata } from '@/lib/createSEOMetadata';
+import Link from 'next/link';
 
 export const metadata = createSEOMetadata({
   title: "Home | Noah's Utilities",
@@ -19,12 +20,13 @@ export default function Home() {
             A collection of tools and utilities built by Noah S Klinger
           </p>
           <div className="mt-10 flex items-center justify-center gap-x-6">
-            <a
+            <Link
+              replace
               href="#featured-tools"
               className="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm transition-all hover:bg-indigo-500 hover:shadow-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
             >
               View Available Tools
-            </a>
+            </Link>
           </div>
         </div>
       </section>
