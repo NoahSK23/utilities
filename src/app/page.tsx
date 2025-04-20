@@ -14,7 +14,7 @@ export default function Home() {
       <section className="px-6 py-24 sm:py-32 lg:px-8">
         <div className="mx-auto max-w-2xl text-center">
           <h1 className="animate-fade-in bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-4xl font-bold tracking-tight text-transparent sm:text-6xl">
-            Noah's Utilities
+            {"Noah's Utilities"}
           </h1>
           <p className="mt-6 text-lg leading-8 text-gray-600 dark:text-gray-300">
             A collection of tools and utilities built by me

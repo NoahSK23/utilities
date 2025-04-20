@@ -50,7 +50,7 @@ export default function NavBar() {
 
   return (
     <>
-      <nav className="border-b border-[#0a0a0a] bg-gray-800 bg-slate-800 p-2 drop-shadow-lg">
+      <nav className="border-b border-[#0a0a0a] bg-gray-800 p-2 drop-shadow-lg">
         <div className="container mx-auto flex items-center justify-end gap-1 md:justify-start">
           {/* Sidebar toggle button */}
           <button
