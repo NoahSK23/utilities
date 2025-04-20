@@ -50,7 +50,7 @@ export default function NavBar() {
 
   return (
     <>
-      <nav className="border-b border-[#0a0a0a] bg-slate-800 p-2 drop-shadow-lg dark:bg-gray-800">
+      <nav className="border-b border-[#0a0a0a] bg-gray-800 bg-slate-800 p-2 drop-shadow-lg">
         <div className="container mx-auto flex items-center justify-end gap-1 md:justify-start">
           {/* Sidebar toggle button */}
           <button
@@ -69,7 +69,7 @@ export default function NavBar() {
             {links.map((link) => (
               <Link href={link.href} key={link.name}>
                 <span
-                  className={`rounded-md px-3 py-2 text-sm font-medium transition-all hover:bg-gray-600 focus:bg-gray-700 focus:text-white focus:outline-hidden dark:text-white ${
+                  className={`rounded-md px-3 py-2 text-sm font-medium text-white transition-all hover:bg-gray-600 focus:bg-gray-700 focus:text-white focus:outline-hidden ${
                     pathname === link.href ? 'bg-gray-700 text-white' : ''
                   }`}
                 >
@@ -79,7 +79,7 @@ export default function NavBar() {
             ))}
           </div>
           <a
-            className="ml-auto hidden items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-all hover:bg-gray-600 focus:bg-gray-700 focus:text-white focus:outline-hidden md:flex dark:text-white"
+            className="ml-auto hidden items-center gap-2 rounded-md px-3 py-2 text-sm font-medium text-white transition-all hover:bg-gray-600 focus:bg-gray-700 focus:text-white focus:outline-hidden md:flex"
             href="https://github.com/noahsk23/utilities"
             target="_blank"
             rel="noreferrer"
