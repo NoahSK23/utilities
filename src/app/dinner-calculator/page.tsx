@@ -40,7 +40,7 @@ export default function DinnerCalculator() {
     //   </div>
     // </main>
     <iframe
-      className="h-screen"
+      className="h-screen w-screen"
       src="https://noahsk23.github.io/dinner-calculator/"
     />
   );

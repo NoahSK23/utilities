@@ -9,7 +9,7 @@ export const metadata = createSEOMetadata({
 
 export default function Home() {
   return (
-    <main className="bg-gradient-to-b from-slate-200 to-slate-300 dark:from-slate-900 dark:to-slate-950">
+    <main className="flex flex-col items-center justify-center">
       {/* Hero Section */}
       <section className="px-6 py-24 sm:py-32 lg:px-8">
         <div className="mx-auto max-w-2xl text-center">
