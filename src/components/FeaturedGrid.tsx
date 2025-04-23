@@ -13,7 +13,7 @@ export default function FeaturedGrid({
     <Link
       href={link}
       key={tool}
-      className="group rounded-xl bg-white p-6 shadow-sm transition-all hover:shadow-md dark:bg-gray-800"
+      className="group rounded-xl bg-white p-6 shadow-sm transition-all hover:translate-y-[-5px] hover:transform hover:bg-gray-100 hover:shadow-md dark:bg-gray-800 dark:hover:bg-gray-700"
     >
       <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
         {tool}

@@ -1,4 +1,4 @@
-import FeaturedGrid from '@/components/featuredGrid';
+import FeaturedGrid from '@/components/FeaturedGrid';
 import { createSEOMetadata } from '@/lib/createSEOMetadata';
 import Link from 'next/link';
 
