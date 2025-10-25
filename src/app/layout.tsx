@@ -32,7 +32,7 @@ export default function RootLayout({
     <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
       <body className="flex min-h-screen flex-col justify-between font-sans">
         <NavBar />
-        <div className="flex flex-grow items-center justify-center bg-gradient-to-b from-slate-200 to-slate-300 dark:from-slate-900 dark:to-slate-950">
+        <div className="flex grow items-center justify-center bg-linear-to-b from-slate-200 to-slate-300 dark:from-slate-900 dark:to-slate-950">
           {children}
         </div>
         <Footer />
