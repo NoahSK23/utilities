@@ -41,8 +41,8 @@ export default function NavBar() {
 
   const links = [
     { name: 'Home', href: '/' },
-    { name: 'Storage Converter', href: '/converter' },
-    { name: 'Measurement Converter', href: '/cm-feetinch' },
+    { name: 'Storage Converter', href: '/storage-converter' },
+    { name: 'Measurement Converter', href: '/measurement-converter' },
     { name: 'Hello', href: '/hello' },
     { name: 'Create Secret', href: '/create-secret' },
     { name: 'Dinner Calculator', href: '/dinner-calculator' },
