@@ -1,8 +1,8 @@
 'use client';
-import { useState, useEffect } from 'react';
-import { clipboardSvg, copiedSvg } from './Icons';
-import Button from './Button';
+import { useEffect, useState } from 'react';
 import Accordion from './Accordion';
+import Button from './Button';
+import { clipboardSvg, copiedSvg } from './Icons';
 
 export default function CreateSecret() {
   const [secret, setSecret] = useState('');
