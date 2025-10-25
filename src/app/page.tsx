@@ -41,12 +41,12 @@ export default function Home() {
           <FeaturedGrid
             tool="Storage Converter"
             description="Convert between different units and formats"
-            link="/converter"
+            link="/storage-converter"
           />
           <FeaturedGrid
             tool="Measurement Converter"
             description="Perform measurement conversions easily"
-            link="/cm-feetinch"
+            link="/measurement-converter"
           />
           <FeaturedGrid
             tool="Create secret"
