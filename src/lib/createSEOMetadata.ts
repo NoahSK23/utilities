@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
-import { TemplateString } from 'next/dist/lib/metadata/types/metadata-types';
-import { OpenGraph } from 'next/dist/lib/metadata/types/opengraph-types';
-import { Twitter } from 'next/dist/lib/metadata/types/twitter-types';
+import type { TemplateString } from 'next/dist/lib/metadata/types/metadata-types';
+import type { OpenGraph } from 'next/dist/lib/metadata/types/opengraph-types';
+import type { Twitter } from 'next/dist/lib/metadata/types/twitter-types';
 
 export function createSEOMetadata({
   title,

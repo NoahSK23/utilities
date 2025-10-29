@@ -1,5 +1,5 @@
 import fs from 'fs/promises'; // Use the async fs API
-import { MetadataRoute } from 'next';
+import type { MetadataRoute } from 'next';
 import path from 'path';
 
 export const dynamic = 'force-static';

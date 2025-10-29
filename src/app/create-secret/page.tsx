@@ -1,6 +1,6 @@
 import CreateSecret from '@/components/CreateSecret';
 import { createSEOMetadata } from '@/lib/createSEOMetadata';
-import { Metadata } from 'next';
+import type { Metadata } from 'next';
 
 export const metadata: Metadata = createSEOMetadata({
   title: 'Create Secret',

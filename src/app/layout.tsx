@@ -1,7 +1,7 @@
 import Footer from '@/components/Footer';
 import NavBar from '@/components/Navbar';
 import { createSEOMetadata } from '@/lib/createSEOMetadata';
-import { Metadata } from 'next';
+import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 import './globals.css';
 

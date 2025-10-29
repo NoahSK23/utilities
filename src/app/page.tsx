@@ -1,6 +1,6 @@
 import FeaturedGrid from '@/components/FeaturedGrid';
 import { createSEOMetadata } from '@/lib/createSEOMetadata';
-import { Metadata } from 'next';
+import type { Metadata } from 'next';
 import Link from 'next/link';
 
 export const metadata: Metadata = createSEOMetadata({

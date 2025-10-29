@@ -8,9 +8,9 @@
     "start": "next start",
     "serve": "serve out",
     "lint": "eslint .",
-    "prettier": "prettier --check src",
-    "prettier:fix": "prettier --write src",
-    "format": "pnpm lint --fix && pnpm prettier:fix"
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --check src",
+    "format:fix": "prettier --write src"
   },
   "dependencies": {
     "next": "16.0.0",
