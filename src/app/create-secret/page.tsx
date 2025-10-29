@@ -1,5 +1,5 @@
-import CreateSecret from '@/components/CreateSecret';
-import { createSEOMetadata } from '@/lib/createSEOMetadata';
+import CreateSecret from '@/components/create-secret';
+import { createSEOMetadata } from '@/lib/create-seo-metadata';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = createSEOMetadata({

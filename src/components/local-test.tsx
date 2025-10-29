@@ -1,6 +1,6 @@
 'use client';
 import { useEffect, useState } from 'react';
-import Button from './Button';
+import Button from './button';
 export default function LocalTest() {
   function handleClick() {
     if (localStorageBool) {

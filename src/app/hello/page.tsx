@@ -1,6 +1,6 @@
-import Button from '@/components/Button';
-import LocalTest from '@/components/LocalTest';
-import { createSEOMetadata } from '@/lib/createSEOMetadata';
+import Button from '@/components/button';
+import LocalTest from '@/components/local-test';
+import { createSEOMetadata } from '@/lib/create-seo-metadata';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 

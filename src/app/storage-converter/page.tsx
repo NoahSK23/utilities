@@ -1,5 +1,5 @@
-import StorageConverter from '@/components/StorageConverter';
-import { createSEOMetadata } from '@/lib/createSEOMetadata';
+import StorageConverter from '@/components/storage-converter';
+import { createSEOMetadata } from '@/lib/create-seo-metadata';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = createSEOMetadata({

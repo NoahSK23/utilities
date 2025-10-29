@@ -1,6 +1,6 @@
-import Footer from '@/components/Footer';
-import NavBar from '@/components/Navbar';
-import { createSEOMetadata } from '@/lib/createSEOMetadata';
+import Footer from '@/components/footer';
+import NavBar from '@/components/navbar';
+import { createSEOMetadata } from '@/lib/create-seo-metadata';
 import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 import './globals.css';

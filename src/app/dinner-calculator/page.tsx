@@ -1,4 +1,4 @@
-import { createSEOMetadata } from '@/lib/createSEOMetadata';
+import { createSEOMetadata } from '@/lib/create-seo-metadata';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = createSEOMetadata({

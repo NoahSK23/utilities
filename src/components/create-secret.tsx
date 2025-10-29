@@ -1,8 +1,8 @@
 'use client';
 import { useEffect, useState } from 'react';
-import Accordion from './Accordion';
-import Button from './Button';
-import { clipboardSvg, copiedSvg } from './Icons';
+import Accordion from './accordion';
+import Button from './button';
+import { clipboardSvg, copiedSvg } from './icons';
 
 export default function CreateSecret() {
   const [secret, setSecret] = useState('');
@@ -76,7 +76,7 @@ export default function CreateSecret() {
         <div className="flex gap-4 rounded-lg bg-slate-900 p-4">
           <p className="text-sm leading-10 break-all text-white">{secret}</p>
           <button
-            className="rounded-lg bg-gray-700 p-2 text-white"
+            className="cursor-pointer rounded-lg bg-gray-700 p-2 text-white"
             onClick={copyToClipboard}
           >
             {svg}

@@ -1,5 +1,5 @@
-import FeaturedGrid from '@/components/FeaturedGrid';
-import { createSEOMetadata } from '@/lib/createSEOMetadata';
+import FeaturedGrid from '@/components/featured-grid';
+import { createSEOMetadata } from '@/lib/create-seo-metadata';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 

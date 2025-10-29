@@ -1,7 +1,7 @@
 'use client';
 import { useState } from 'react';
-import Button from './Button';
-import Section from './Section';
+import Button from './button';
+import Section from './section';
 export default function StorageConverter() {
   const [result, setResult] = useState('');
   const [error, setError] = useState(false);

@@ -1,10 +1,10 @@
 'use client';
 
 import { useState } from 'react';
-import Button from './Button';
-import Section from './Section';
+import Button from './button';
+import Section from './section';
 
-export default function CmToFeetInchConvert() {
+export default function MeasurementConverter() {
   const [answer, setAnswer] = useState<string>();
   const [conversionType, setConversionType] = useState<'cm' | 'inches'>('cm');
 
