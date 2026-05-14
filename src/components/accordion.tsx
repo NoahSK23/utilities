@@ -1,8 +1,8 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
-type AccordionpProps = {
+type AccordionProps = {
   children: React.ReactNode;
   title: string;
   id?: string;
@@ -14,12 +14,14 @@ export default function Accordion({
   title,
   id,
   active = false,
-}: AccordionpProps) {
-  const [accordionOpen, setAccordionOpen] = useState<boolean>(false);
+}: AccordionProps) {
+  const [accordionOpen, setAccordionOpen] = useState<boolean>(active);
+  const [prevActive, setPrevActive] = useState(active);
 
-  useEffect(() => {
+  if (active !== prevActive) {
+    setPrevActive(active);
     setAccordionOpen(active);
-  }, [active]);
+  }
 
   return (
     <div className="w-full rounded-md border border-neutral-800 p-2 px-3 transition-colors hover:border-neutral-700 hover:shadow-sm dark:border-neutral-600 dark:hover:border-neutral-500 dark:hover:bg-neutral-900">
