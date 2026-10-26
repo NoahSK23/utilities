@@ -6,6 +6,9 @@ const nextConfig = {
   output: 'export',
   basePath: process.env.NODE_ENV === 'production' ? '/utilities' : '',
   assetPrefix: process.env.NODE_ENV === 'production' ? '/utilities' : '',
+  images: {
+    unoptimized: true,
+  },
   skipTrailingSlashRedirect: true,
   typescript: {
     ignoreBuildErrors: true,
