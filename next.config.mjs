@@ -1,5 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  allowedDevOrigins: process.env.TAILSCALE_HOST
+    ? [process.env.TAILSCALE_HOST]
+    : [],
   output: 'export',
   basePath: process.env.NODE_ENV === 'production' ? '/utilities' : '',
   assetPrefix: process.env.NODE_ENV === 'production' ? '/utilities' : '',
