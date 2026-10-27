@@ -1,0 +1,68 @@
+name: CI
+
+on:
+  pull_request:
+    branches: ['main']
+  workflow_call:
+    inputs:
+      upload-pages-artifact:
+        description: Upload the validated static export for deployment.
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+# Cancel outdated PR checks without interrupting production runs.
+# Use a different group from the calling deployment workflow.
+concurrency:
+  group: ci-${{ github.event_name }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  checks:
+    name: ${{ matrix.check }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        check: [lint, typecheck]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+      - name: Setup pnpm and Node
+        uses: pnpm/setup@v3
+        with:
+          node-version-file: '.nvmrc'
+          cache: true
+          require-lockfile: true
+      - name: Run ${{ matrix.check }}
+        run: pnpm run ${{ matrix.check }}
+
+  build:
+    needs: checks
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+      - name: Setup pnpm and Node
+        uses: pnpm/setup@v3
+        with:
+          node-version-file: '.nvmrc'
+          cache: true
+          require-lockfile: true
+      - name: Restore cache
+        uses: actions/cache@v6
+        with:
+          path: .next/cache
+          # Reuse the build cache when dependencies have not changed.
+          key: ${{ runner.os }}-nextjs-${{ hashFiles('pnpm-lock.yaml') }}-${{ hashFiles('**.[jt]s', '**.[jt]sx') }}
+          restore-keys: |
+            ${{ runner.os }}-nextjs-${{ hashFiles('pnpm-lock.yaml') }}-
+      - name: Build with Next.js
+        run: pnpm build
+      - name: Upload Pages artifact
+        if: inputs.upload-pages-artifact
+        uses: actions/upload-pages-artifact@v5
+        with:
+          path: ./out
