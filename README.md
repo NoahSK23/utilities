@@ -13,3 +13,15 @@ pnpm dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+
+## Preview the production build
+
+Build the static site, then start the preview server:
+
+```bash
+pnpm build
+pnpm start
+```
+
+Open [http://localhost:3000/utilities/](http://localhost:3000/utilities/).
+The preview serves the exported files in `out` using the `/utilities` path.

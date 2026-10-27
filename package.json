@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
+    "start": "serve out --listen 3000 --config ../serve.json",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier --check src",
@@ -28,6 +28,7 @@
     "prettier": "^3.9.10",
     "prettier-plugin-organize-imports": "^4.3.0",
     "prettier-plugin-tailwindcss": "^0.8.1",
+    "serve": "^14.2.6",
     "tailwindcss": "^4.3.3",
     "typescript": "^6.0.3"
   },

@@ -1,0 +1,20 @@
+{
+  "directoryListing": false,
+  "redirects": [{ "source": "/", "destination": "/utilities/", "type": 307 }],
+  "rewrites": [
+    { "source": "/utilities", "destination": "/index.html" },
+    {
+      "source": "/utilities/_next/static/:group/:file",
+      "destination": "/_next/static/:group/:file"
+    },
+    {
+      "source": "/utilities/:page/:file",
+      "destination": "/:page/:file"
+    },
+    {
+      "source": "/utilities/:file.:extension",
+      "destination": "/:file.:extension"
+    },
+    { "source": "/utilities/:page", "destination": "/:page.html" }
+  ]
+}
