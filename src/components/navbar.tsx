@@ -1,141 +1,105 @@
 'use client';
+
+import { tools } from '@/lib/tools';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { GithubSolid } from './icons';
+import ToolIcon, { type IconName } from './tool-icon';
 
 export default function Navbar() {
   const pathname = usePathname();
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-
-  const closeSidebar = () => setIsSidebarOpen(false);
-
-  useEffect(() => {
-    const handleOutsideClick = (event: MouseEvent) => {
-      if (isSidebarOpen && !(event.target as Element).closest('aside')) {
-        closeSidebar();
-      }
-    };
-    const handleEscapeKey = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        closeSidebar();
-      }
-    };
-    const handleResize = () => {
-      if (window.innerWidth >= 768) {
-        closeSidebar();
-      }
-    };
-
-    window.addEventListener('mousedown', handleOutsideClick);
-    window.addEventListener('keydown', handleEscapeKey);
-    window.addEventListener('resize', handleResize);
-
-    // Cleanup the event listener
-    return () => {
-      window.removeEventListener('mousedown', handleOutsideClick);
-      window.removeEventListener('keydown', handleEscapeKey);
-      window.removeEventListener('resize', handleResize);
-    };
-  }, [isSidebarOpen]);
-
-  const links = [
-    { name: 'Home', href: '/' },
-    { name: 'Storage Converter', href: '/storage-converter' },
-    { name: 'Measurement Converter', href: '/measurement-converter' },
-    { name: 'Hello', href: '/hello' },
-    { name: 'Create Secret', href: '/create-secret' },
-    { name: 'Dinner Calculator', href: '/dinner-calculator' },
+  const [open, setOpen] = useState(false);
+  const navRef = useRef<HTMLElement>(null);
+  const toggleRef = useRef<HTMLButtonElement>(null);
+  const links: { name: string; href: string; icon: IconName }[] = [
+    { name: 'All tools', href: '/', icon: 'grid' },
+    ...tools,
   ];
 
-  return (
-    <>
-      <nav className="border-b border-[#0a0a0a] bg-gray-800 p-2 drop-shadow-lg">
-        <div className="container mx-auto flex items-center justify-end gap-1 md:justify-start">
-          {/* Sidebar toggle button */}
-          <button
-            onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-            className="flex flex-col place-items-end rounded-lg border border-black p-2 md:hidden"
-          >
-            <svg viewBox="0 0 100 80" width="40" height="40" fill="white">
-              <rect width="100" height="20"></rect>
-              <rect y="30" width="100" height="20"></rect>
-              <rect y="60" width="100" height="20"></rect>
-            </svg>
-          </button>
+  useEffect(() => {
+    if (!open) return;
+    function closeOnEscape(event: KeyboardEvent) {
+      if (event.key === 'Escape') {
+        setOpen(false);
+        toggleRef.current?.focus();
+      }
+    }
+    function closeOnOutside(event: PointerEvent) {
+      if (!navRef.current?.contains(event.target as Node)) setOpen(false);
+    }
+    document.addEventListener('keydown', closeOnEscape);
+    document.addEventListener('pointerdown', closeOnOutside);
+    return () => {
+      document.removeEventListener('keydown', closeOnEscape);
+      document.removeEventListener('pointerdown', closeOnOutside);
+    };
+  }, [open]);
 
-          {/* Desktop Links */}
-          <div className="hidden items-center gap-1 p-2 md:flex">
-            {links.map((link) => (
-              <Link href={link.href} key={link.name}>
-                <span
-                  className={`rounded-md px-3 py-2 text-sm font-medium text-white transition-all hover:bg-gray-600 focus:bg-gray-700 focus:text-white focus:outline-hidden ${
-                    pathname === link.href ? 'bg-gray-700 text-white' : ''
-                  }`}
-                >
-                  {link.name}
-                </span>
-              </Link>
-            ))}
-          </div>
+  function navLink(link: { name: string; href: string; icon: IconName }) {
+    return (
+      <Link
+        key={link.href}
+        href={link.href}
+        className="nav-link"
+        aria-current={pathname === link.href ? 'page' : undefined}
+        onClick={() => setOpen(false)}
+      >
+        <ToolIcon name={link.icon} />
+        <span>{link.name}</span>
+      </Link>
+    );
+  }
+
+  return (
+    <aside className="sidebar" ref={navRef}>
+      <div className="brand-row">
+        <Link
+          href="/"
+          className="brand"
+          onClick={() => setOpen(false)}
+          aria-label="Noah's Utilities home"
+        >
+          <span className="brand-mark" aria-hidden="true">
+            <i />
+            <i />
+            <i />
+            <i />
+          </span>
+          <span>Noah&apos;s Utilities</span>
+        </Link>
+        <button
+          ref={toggleRef}
+          type="button"
+          className="menu-toggle button button-ghost"
+          aria-label={open ? 'Close navigation' : 'Open navigation'}
+          aria-expanded={open}
+          aria-controls="site-navigation"
+          onClick={() => setOpen(!open)}
+        >
+          <ToolIcon name={open ? 'close' : 'menu'} />
+        </button>
+      </div>
+      <nav
+        id="site-navigation"
+        aria-label="Main navigation"
+        className={`navigation ${open ? 'navigation-open' : ''}`}
+      >
+        <div className="nav-tools">{links.map(navLink)}</div>
+        <div className="nav-secondary">
+          {navLink({ name: 'Browser check', href: '/hello', icon: 'browser' })}
           <a
-            className="ml-auto hidden items-center gap-2 rounded-md px-3 py-2 text-sm font-medium text-white transition-all hover:bg-gray-600 focus:bg-gray-700 focus:text-white focus:outline-hidden md:flex"
+            className="nav-link"
             href="https://github.com/noahsk23/utilities"
             target="_blank"
             rel="noreferrer"
           >
-            {GithubSolid} View source on Github
+            {GithubSolid}
+            <span>Source code</span>
+            <ToolIcon name="external" className="external-icon" />
           </a>
         </div>
       </nav>
-
-      {/* Mobile Sidebar */}
-      <div
-        className={`bg-opacity-50 fixed inset-0 z-50 bg-black transition-opacity ${isSidebarOpen ? 'opacity-100' : 'pointer-events-none opacity-0'}`}
-        onClick={closeSidebar}
-      >
-        <aside
-          className={`fixed top-0 right-0 z-50 h-full w-64 transform bg-gray-800 text-white transition-transform ${isSidebarOpen ? 'translate-x-0' : 'translate-x-full'}`}
-          onClick={(e) => e.stopPropagation()}
-        >
-          <div className="flex justify-end">
-            <button
-              onClick={() => setIsSidebarOpen(false)}
-              className="p-2 text-white"
-            >
-              {/* Close button */}
-              <svg viewBox="0 0 24 24" width="24" height="24">
-                <path
-                  fill="currentColor"
-                  d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12Z"
-                />
-              </svg>
-            </button>
-          </div>
-          {links.map((link) => (
-            <Link href={link.href} key={link.name}>
-              <span
-                onClick={() => setIsSidebarOpen(false)}
-                className={`block px-3 py-2 text-end text-sm font-medium transition-all hover:bg-gray-200 hover:text-black ${
-                  pathname === link.href
-                    ? 'bg-gray-300 text-black hover:bg-gray-300'
-                    : ''
-                }`}
-              >
-                {link.name}
-              </span>
-            </Link>
-          ))}
-          <a
-            className="flex items-center justify-end gap-2 px-3 py-2 text-end text-sm font-medium transition-all hover:bg-gray-200 hover:text-black"
-            href="https://github.com/noahsk23/utilities"
-            target="_blank"
-            rel="noreferrer"
-          >
-            {GithubSolid} View source on Github
-          </a>
-        </aside>
-      </div>
-    </>
+    </aside>
   );
 }

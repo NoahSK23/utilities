@@ -1,23 +1,19 @@
 import type { ButtonHTMLAttributes } from 'react';
-interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
-  onClick?: () => void;
-  children?: React.ReactNode;
-  bgColor?: string;
-  textColor?: string;
-}
 
 export default function Button({
-  onClick,
   children,
-  bgColor = 'bg-black',
-  textColor = 'text-white',
+  className = '',
+  variant = 'primary',
+  type = 'button',
   ...props
-}: Props) {
+}: ButtonHTMLAttributes<HTMLButtonElement> & {
+  variant?: 'primary' | 'secondary' | 'ghost';
+}) {
   return (
     <button
+      type={type}
+      className={`button button-${variant} ${className}`}
       {...props}
-      onClick={onClick}
-      className={`${props.className} rounded-full ${bgColor} ${textColor} hover:bg-opacity-85 flex h-10 cursor-pointer items-center justify-center border border-solid border-black/8 px-4 text-sm transition-all hover:border-transparent sm:h-12 sm:min-w-36 sm:px-5 sm:text-base dark:border-black/[.145]`}
     >
       {children}
     </button>

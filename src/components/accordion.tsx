@@ -1,72 +1,39 @@
 'use client';
 
-import { useState } from 'react';
-
-type AccordionProps = {
-  children: React.ReactNode;
-  title: string;
-  id?: string;
-  active?: boolean;
-};
+import { useId, useState } from 'react';
+import ToolIcon from './tool-icon';
 
 export default function Accordion({
   children,
   title,
-  id,
-  active = false,
-}: AccordionProps) {
-  const [accordionOpen, setAccordionOpen] = useState<boolean>(active);
-  const [prevActive, setPrevActive] = useState(active);
-
-  if (active !== prevActive) {
-    setPrevActive(active);
-    setAccordionOpen(active);
-  }
-
+}: {
+  children: React.ReactNode;
+  title: string;
+}) {
+  const id = useId();
+  const [open, setOpen] = useState(false);
   return (
-    <div className="w-full rounded-md border border-neutral-800 p-2 px-3 transition-colors hover:border-neutral-700 hover:shadow-sm dark:border-neutral-600 dark:hover:border-neutral-500 dark:hover:bg-neutral-900">
-      <h2 className="text-2xl font-semibold">
+    <div className="accordion">
+      <h2 className="accordion-heading">
         <button
-          className="flex w-full items-center justify-between py-2 text-left font-semibold"
-          onClick={(e) => {
-            e.preventDefault();
-            setAccordionOpen(!accordionOpen);
-          }}
-          aria-expanded={accordionOpen}
-          aria-controls={`accordion-text-${id}`}
-          style={{ cursor: 'pointer' }}
+          type="button"
+          id={`${id}-trigger`}
+          className="accordion-trigger"
+          aria-expanded={open}
+          aria-controls={`${id}-content`}
+          onClick={() => setOpen(!open)}
         >
-          <span>{title}</span>
-          <svg
-            className="ml-8 shrink-0 fill-white"
-            width="16"
-            height="16"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <rect
-              y="7"
-              width="16"
-              height="2"
-              rx="1"
-              className={`origin-center transform transition duration-200 ease-out ${accordionOpen && 'rotate-180!'}`}
-            />
-            <rect
-              y="7"
-              width="16"
-              height="2"
-              rx="1"
-              className={`origin-center rotate-90 transform transition duration-200 ease-out ${accordionOpen && 'rotate-180!'}`}
-            />
-          </svg>
+          {title}
+          <ToolIcon name="chevron" />
         </button>
       </h2>
       <div
-        id={`accordion-text-${id}`}
+        id={`${id}-content`}
         role="region"
-        aria-labelledby={`accordion-title-${id}`}
-        className={`grid overflow-hidden text-sm text-slate-600 transition-all duration-300 ease-in-out dark:text-neutral-200 ${accordionOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}
+        aria-labelledby={`${id}-trigger`}
+        hidden={!open}
       >
-        <div className="overflow-hidden text-lg">{children}</div>
+        {children}
       </div>
     </div>
   );

@@ -1,42 +1,71 @@
 'use client';
-import { useEffect, useState } from 'react';
+
+import { useState, useSyncExternalStore } from 'react';
 import Button from './button';
+import Section from './section';
+
+function subscribe(callback: () => void) {
+  window.addEventListener('storage', callback);
+  window.addEventListener('utilities-storage', callback);
+  return () => {
+    window.removeEventListener('storage', callback);
+    window.removeEventListener('utilities-storage', callback);
+  };
+}
+function getSnapshot() {
+  try {
+    return localStorage.getItem('test') !== null ? 'saved' : 'empty';
+  } catch {
+    return 'unavailable';
+  }
+}
+
 export default function LocalTest() {
-  function handleClick() {
-    if (localStorageBool) {
-      localStorage.removeItem('test');
-      setLocalStorageBool(false);
-      setTest('Cleared localStorage');
-    } else {
-      localStorage.setItem('test', 'test');
-      setLocalStorageBool(true);
-      setTest('LocalStorage set');
+  const status = useSyncExternalStore(subscribe, getSnapshot, () => 'loading');
+  const [error, setError] = useState('');
+  const saved = status === 'saved';
+
+  function toggle() {
+    try {
+      if (saved) localStorage.removeItem('test');
+      else localStorage.setItem('test', 'test');
+      window.dispatchEvent(new Event('utilities-storage'));
+      setError('');
+    } catch {
+      setError(
+        'Storage is blocked. Allow site storage in your browser settings.'
+      );
     }
   }
 
-  const [test, setTest] = useState('Checking localStorage...');
-  const [localStorageBool, setLocalStorageBool] = useState(false);
-
-  useEffect(() => {
-    if (localStorage.getItem('test')) {
-      setTest('You have localStorage set!');
-      setLocalStorageBool(true);
-    } else {
-      setTest('You do not have localStorage set.');
-      setLocalStorageBool(false);
-    }
-  }, []);
-
-  const buttonClass = localStorageBool ? 'bg-red-500' : 'bg-green-500';
-
   return (
-    <div>
-      <p>LocalTest: {test}</p>
-      <div className="mt-2 flex flex-col items-center justify-center gap-2">
-        <Button bgColor={buttonClass} onClick={handleClick}>
-          {localStorageBool ? 'Clear localStorage' : 'Set localStorage'}
-        </Button>
-      </div>
-    </div>
+    <Section>
+      <h2 className="section-title">Local storage</h2>
+      <p className="storage-status" role="status">
+        <span
+          className={`status-dot ${saved ? 'status-dot-active' : ''}`}
+          aria-hidden="true"
+        />
+        {status === 'loading'
+          ? 'Checking storage…'
+          : saved
+            ? 'Test value saved in this browser.'
+            : status === 'unavailable'
+              ? 'Browser storage is unavailable.'
+              : 'No test value saved.'}
+      </p>
+      <Button
+        onClick={toggle}
+        variant={saved ? 'secondary' : 'primary'}
+        disabled={status === 'loading' || status === 'unavailable'}
+      >
+        {saved ? 'Clear test value' : 'Save test value'}
+      </Button>
+      {error && (
+        <p role="alert" className="error">
+          {error}
+        </p>
+      )}
+    </Section>
   );
 }

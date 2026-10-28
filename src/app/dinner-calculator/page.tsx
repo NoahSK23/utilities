@@ -1,17 +1,18 @@
 import DinnerCalculator from '@/components/dinner-calculator';
+import PageShell from '@/components/page-shell';
 import { createSEOMetadata } from '@/lib/create-seo-metadata';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = createSEOMetadata({
   title: 'Dinner Calculator',
   description:
-    'Calculate and split group dinner bill details between you and your brother.',
+    'Calculate dinner shares with 6% tax and an equally split 20% tip.',
 });
 
-export default function DinnerCalculatorPage() {
+export default function Page() {
   return (
-    <main className="flex min-h-[80vh] w-full flex-col items-center justify-center">
+    <PageShell title="Dinner calculator" icon="dinner">
       <DinnerCalculator />
-    </main>
+    </PageShell>
   );
 }

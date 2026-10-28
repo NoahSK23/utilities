@@ -2,423 +2,278 @@
 
 import { useState } from 'react';
 import Button from './button';
+import CopyButton from './copy-button';
 import Section from './section';
+import ToolIcon from './tool-icon';
 
+type Person = 'my' | 'brother';
 interface DinnerItem {
   id: string;
   price: number;
 }
+const currency = (value: number) => `$${value.toFixed(2)}`;
 
 export default function DinnerCalculator() {
-  const [totalPrice, setTotalPrice] = useState<string>('');
-  const [totalPeople, setTotalPeople] = useState<string>('');
-  const [myItems, setMyItems] = useState<DinnerItem[]>([]);
-  const [brotherItems, setBrotherItems] = useState<DinnerItem[]>([]);
-  const [myItemPrice, setMyItemPrice] = useState<string>('');
-  const [brotherItemPrice, setBrotherItemPrice] = useState<string>('');
-  const [isCopied, setIsCopied] = useState<boolean>(false);
+  const [totalPrice, setTotalPrice] = useState('');
+  const [totalPeople, setTotalPeople] = useState('');
+  const [items, setItems] = useState<Record<Person, DinnerItem[]>>({
+    my: [],
+    brother: [],
+  });
+  const [prices, setPrices] = useState<Record<Person, string>>({
+    my: '',
+    brother: '',
+  });
+  const [errors, setErrors] = useState<Record<Person, string>>({
+    my: '',
+    brother: '',
+  });
+  const [groupError, setGroupError] = useState('');
+  const groupSubtotal = Number(totalPrice);
+  const people = Number(totalPeople);
+  const validSubtotal =
+    totalPrice.trim() !== '' &&
+    Number.isFinite(groupSubtotal) &&
+    groupSubtotal > 0;
+  const validPeople =
+    totalPeople.trim() !== '' && Number.isInteger(people) && people > 0;
+  const valid = validSubtotal && validPeople;
+  const tip = valid ? (groupSubtotal * 0.2) / people : 0;
+  const persons: {
+    key: Person;
+    title: string;
+    subtotal: number;
+    tax: number;
+    total: number;
+  }[] = (
+    [
+      { key: 'my', title: 'My items' },
+      { key: 'brother', title: "Brother's items" },
+    ] as const
+  ).map((person) => {
+    const subtotal = items[person.key].reduce(
+      (sum, item) => sum + item.price,
+      0
+    );
+    const tax = subtotal * 0.06;
+    return { ...person, subtotal, tax, total: subtotal + tax + tip };
+  });
+  const combined = persons.reduce((sum, person) => sum + person.total, 0);
+  const breakdown = `Dinner breakdown\nGroup subtotal: ${currency(groupSubtotal)}\nPeople: ${people}\nTax: 6%\nTip: 20%, split equally\n\n${persons.map((person) => `${person.key === 'my' ? 'My share' : "Brother's share"}\nItems: ${currency(person.subtotal)}\nTax: ${currency(person.tax)}\nTip: ${currency(tip)}\nTotal: ${currency(person.total)}`).join('\n\n')}\n\nCombined total: ${currency(combined)}`;
 
-  const [groupError, setGroupError] = useState<string>('');
-  const [myError, setMyError] = useState<string>('');
-  const [brotherError, setBrotherError] = useState<string>('');
-
-  const parsedTotalPrice = parseFloat(totalPrice);
-  const parsedTotalPeople = parseInt(totalPeople, 10);
-
-  const isGroupValid =
-    !isNaN(parsedTotalPrice) &&
-    parsedTotalPrice > 0 &&
-    !isNaN(parsedTotalPeople) &&
-    parsedTotalPeople > 0;
-
-  const mySubtotal = myItems.reduce((sum, item) => sum + item.price, 0);
-  const brotherSubtotal = brotherItems.reduce(
-    (sum, item) => sum + item.price,
-    0
-  );
-
-  const taxRate = 0.06;
-  const tipRate = 0.2;
-
-  const myTax = mySubtotal * taxRate;
-  const myTip = isGroupValid
-    ? (parsedTotalPrice * tipRate) / parsedTotalPeople
-    : 0;
-  const myTotalWithTip = mySubtotal + myTip;
-  const myTotalWithTaxAndTip = mySubtotal + myTip + myTax;
-
-  const brotherTax = brotherSubtotal * taxRate;
-  const brotherTip = isGroupValid
-    ? (parsedTotalPrice * tipRate) / parsedTotalPeople
-    : 0;
-  const brotherTotalWithTip = brotherSubtotal + brotherTip;
-  const brotherTotalWithTaxAndTip = brotherSubtotal + brotherTip + brotherTax;
-
-  const grandTotalCombined = myTotalWithTaxAndTip + brotherTotalWithTaxAndTip;
-
-  const handleAddItem = (person: 'my' | 'brother') => {
-    const inputPrice = person === 'my' ? myItemPrice : brotherItemPrice;
-    const price = parseFloat(inputPrice);
-
-    if (isNaN(price) || price <= 0) {
-      if (person === 'my') {
-        setMyError('Please enter a valid price');
-      } else {
-        setBrotherError('Please enter a valid price');
-      }
+  function addItem(event: React.FormEvent<HTMLFormElement>, person: Person) {
+    event.preventDefault();
+    if (!validSubtotal || !validPeople) {
+      setGroupError(
+        !validSubtotal
+          ? 'Enter a group subtotal greater than zero.'
+          : 'Enter a whole number of people greater than zero.'
+      );
       return;
     }
-
-    if (isNaN(parsedTotalPrice) || parsedTotalPrice <= 0) {
-      setGroupError('Please enter a valid grand total first');
+    const price = Number(prices[person]);
+    if (!Number.isFinite(price) || price <= 0) {
+      setErrors((previous) => ({
+        ...previous,
+        [person]: 'Enter a price greater than zero.',
+      }));
       return;
     }
-
-    if (isNaN(parsedTotalPeople) || parsedTotalPeople <= 0) {
-      setGroupError('Please enter a valid number of people first');
-      return;
-    }
-
     setGroupError('');
-    if (person === 'my') {
-      setMyError('');
-      setMyItems((prev) => [
-        ...prev,
+    setErrors((previous) => ({ ...previous, [person]: '' }));
+    setItems((previous) => ({
+      ...previous,
+      [person]: [
+        ...previous[person],
         { id: `${Date.now()}-${Math.random()}`, price },
-      ]);
-      setMyItemPrice('');
-    } else {
-      setBrotherError('');
-      setBrotherItems((prev) => [
-        ...prev,
-        { id: `${Date.now()}-${Math.random()}`, price },
-      ]);
-      setBrotherItemPrice('');
-    }
-  };
-
-  const handleRemoveItem = (person: 'my' | 'brother', id: string) => {
-    if (person === 'my') {
-      setMyItems((prev) => prev.filter((item) => item.id !== id));
-    } else {
-      setBrotherItems((prev) => prev.filter((item) => item.id !== id));
-    }
-  };
-
-  const handleCopyBreakdown = async () => {
-    const text = `
-Dinner Calculator Breakdown:
----------------------------
-Group Details:
-- Grand Total: $${parsedTotalPrice.toFixed(2)}
-- Total People: ${parsedTotalPeople}
-
-My Share:
-- Items Subtotal: $${mySubtotal.toFixed(2)}
-- Tip Share: $${myTip.toFixed(2)}
-- Tax (6%): $${myTax.toFixed(2)}
-- Total Owed: $${myTotalWithTaxAndTip.toFixed(2)}
-
-Brother's Share:
-- Items Subtotal: $${brotherSubtotal.toFixed(2)}
-- Tip Share: $${brotherTip.toFixed(2)}
-- Tax (6%): $${brotherTax.toFixed(2)}
-- Total Owed: $${brotherTotalWithTaxAndTip.toFixed(2)}
-
----------------------------
-Grand Total Combined: $${grandTotalCombined.toFixed(2)}
-`.trim();
-
-    try {
-      await navigator.clipboard.writeText(text);
-      setIsCopied(true);
-      setTimeout(() => setIsCopied(false), 2000);
-    } catch {
-      // Fallback if clipboard fails
-    }
-  };
-
-  const inputClass =
-    'w-full appearance-none rounded-sm border px-3 py-2 leading-tight shadow-xs focus:outline-hidden transition-all bg-white border-gray-300 text-neutral-700 focus:ring-1 focus:ring-gray-400';
+      ],
+    }));
+    setPrices((previous) => ({ ...previous, [person]: '' }));
+  }
 
   return (
-    <div className="w-full p-4">
-      <h1 className="mb-2 text-center text-3xl font-bold">Dinner Calculator</h1>
-      <Section>
-        {/* Description Row */}
-        <p className="mb-6 text-sm text-slate-500">
-          Calculate and split group dinner bill details.
-        </p>
-
-        {/* Group Inputs */}
-        <div className="mb-6">
-          <div className="mb-4">
-            <label
-              htmlFor="totalPrice"
-              className="mb-1 block text-sm font-medium text-gray-700"
-            >
-              Grand Total for All (for tip Calculation):
-            </label>
-            <input
-              id="totalPrice"
-              type="number"
-              min="0"
-              step="0.01"
-              placeholder="Enter Price"
-              value={totalPrice}
-              onChange={(e) => {
-                setTotalPrice(e.target.value);
-                if (groupError) setGroupError('');
-              }}
-              className={inputClass}
-            />
+    <Section>
+      <div className="form-stack">
+        <div className="form-grid">
+          <div className="field">
+            <label htmlFor="totalPrice">Group subtotal</label>
+            <div className="input-with-unit">
+              <input
+                className="input"
+                id="totalPrice"
+                type="number"
+                inputMode="decimal"
+                min="0.01"
+                step="0.01"
+                placeholder="0.00"
+                value={totalPrice}
+                aria-invalid={!!groupError && !validSubtotal}
+                aria-describedby={
+                  groupError && !validSubtotal ? 'group-error' : 'dinner-rates'
+                }
+                onChange={(event) => {
+                  setTotalPrice(event.target.value);
+                  setGroupError('');
+                }}
+              />
+              <span className="input-unit">USD</span>
+            </div>
           </div>
-
-          <div className="mb-2">
-            <label
-              htmlFor="totalPeople"
-              className="mb-1 block text-sm font-medium text-gray-700"
-            >
-              Number of people who came (for tip Calculation):
-            </label>
+          <div className="field">
+            <label htmlFor="totalPeople">People</label>
             <input
+              className="input"
               id="totalPeople"
               type="number"
+              inputMode="numeric"
               min="1"
               step="1"
-              placeholder="Enter people"
+              placeholder="2"
               value={totalPeople}
-              onChange={(e) => {
-                setTotalPeople(e.target.value);
-                if (groupError) setGroupError('');
+              aria-invalid={!!groupError && !validPeople}
+              aria-describedby={
+                groupError && !validPeople ? 'group-error' : 'dinner-rates'
+              }
+              onChange={(event) => {
+                setTotalPeople(event.target.value);
+                setGroupError('');
               }}
-              className={inputClass}
             />
           </div>
-          {groupError && (
-            <p className="mt-2 text-xs font-semibold text-red-500">
-              {groupError}
-            </p>
-          )}
         </div>
-
-        {/* Dinner Items Lists */}
-        <div className="grid gap-6 md:grid-cols-2">
-          <div>
-            <h3 className="mb-2 text-lg font-bold">My Dinner Items</h3>
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                handleAddItem('my');
-              }}
-              className="mb-3 flex items-center gap-2"
-            >
-              <div className="relative flex-1">
-                <input
-                  id="myItemPrice"
-                  type="number"
-                  min="0.01"
-                  step="0.01"
-                  placeholder="Enter price"
-                  value={myItemPrice}
-                  onChange={(e) => {
-                    setMyItemPrice(e.target.value);
-                    if (myError) setMyError('');
-                  }}
-                  className={inputClass}
-                />
-              </div>
-              <Button
-                type="submit"
-                className="!sm:h-10 !sm:px-3 h-10! rounded-sm px-3! text-xs font-semibold sm:text-sm"
-              >
-                Add Item
-              </Button>
-            </form>
-            {myError && (
-              <p className="mb-2 text-xs font-semibold text-red-500">
-                {myError}
-              </p>
-            )}
-            <ul className="mb-4 divide-y divide-gray-200 rounded-sm border border-gray-200">
-              {myItems.map((item) => (
-                <li
-                  key={item.id}
-                  className="flex items-center justify-between px-3 py-2 text-sm text-slate-700 hover:bg-slate-50"
-                >
-                  <span>${item.price.toFixed(2)}</span>
-                  <button
-                    type="button"
-                    onClick={() => handleRemoveItem('my', item.id)}
-                    className="cursor-pointer rounded-sm border border-gray-200 px-2 py-0.5 text-sm font-bold text-gray-500 transition-all hover:border-red-200 hover:bg-red-50 hover:text-red-600"
-                  >
-                    -
-                  </button>
-                </li>
-              ))}
-              {myItems.length === 0 && (
-                <li className="px-3 py-3 text-center text-xs text-gray-400 italic">
-                  No items
-                </li>
-              )}
-            </ul>
-          </div>
-
-          <div>
-            <h3 className="mb-2 text-lg font-bold">
-              Brother&apos;s Dinner Items
-            </h3>
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                handleAddItem('brother');
-              }}
-              className="mb-3 flex items-center gap-2"
-            >
-              <div className="relative flex-1">
-                <input
-                  id="brotherItemPrice"
-                  type="number"
-                  min="0.01"
-                  step="0.01"
-                  placeholder="Enter price"
-                  value={brotherItemPrice}
-                  onChange={(e) => {
-                    setBrotherItemPrice(e.target.value);
-                    if (brotherError) setBrotherError('');
-                  }}
-                  className={inputClass}
-                />
-              </div>
-              <Button
-                type="submit"
-                className="!sm:h-10 !sm:px-3 h-10! rounded-sm px-3! text-xs font-semibold sm:text-sm"
-              >
-                Add Item
-              </Button>
-            </form>
-            {brotherError && (
-              <p className="mb-2 text-xs font-semibold text-red-500">
-                {brotherError}
-              </p>
-            )}
-            <ul className="mb-4 divide-y divide-gray-200 rounded-sm border border-gray-200">
-              {brotherItems.map((item) => (
-                <li
-                  key={item.id}
-                  className="flex items-center justify-between px-3 py-2 text-sm text-slate-700 hover:bg-slate-50"
-                >
-                  <span>${item.price.toFixed(2)}</span>
-                  <button
-                    type="button"
-                    onClick={() => handleRemoveItem('brother', item.id)}
-                    className="cursor-pointer rounded-sm border border-gray-200 px-2 py-0.5 text-sm font-bold text-gray-500 transition-all hover:border-red-200 hover:bg-red-50 hover:text-red-600"
-                  >
-                    -
-                  </button>
-                </li>
-              ))}
-              {brotherItems.length === 0 && (
-                <li className="px-3 py-3 text-center text-xs text-gray-400 italic">
-                  No items
-                </li>
-              )}
-            </ul>
-          </div>
-        </div>
-
-        {/* Totals Section */}
-        {isGroupValid && (
-          <div id="totals" className="mt-6 border-t border-gray-200 pt-6">
-            <div className="mb-4 flex items-center justify-between">
-              <h2 className="text-xl font-bold">Totals</h2>
-              <button
-                type="button"
-                onClick={handleCopyBreakdown}
-                className={`cursor-pointer rounded-sm border px-2.5 py-1.5 text-xs font-semibold shadow-xs transition-all ${
-                  isCopied
-                    ? 'border-emerald-500/30 bg-emerald-500/10 text-emerald-600'
-                    : 'border-gray-300 bg-white text-gray-700 hover:bg-gray-50'
-                }`}
-              >
-                {isCopied ? 'Copied!' : 'Copy Breakdown'}
-              </button>
-            </div>
-
-            <div className="grid gap-6 md:grid-cols-2">
-              {/* My share */}
-              <div className="rounded-sm border border-gray-200 bg-gray-50 p-4">
-                <h4 className="mb-2 text-xs font-bold tracking-wider text-gray-500 uppercase">
-                  My Share
-                </h4>
-                <div className="space-y-1.5">
-                  <p
-                    id="myTotal"
-                    className="flex justify-between text-sm font-semibold"
-                  >
-                    <span>My Total:</span> <span>${mySubtotal.toFixed(2)}</span>
-                  </p>
-                  <p
-                    id="myTotalTip"
-                    className="flex justify-between text-sm text-gray-500"
-                  >
-                    <span>Total + Tip (${myTip.toFixed(2)}):</span>{' '}
-                    <span>${myTotalWithTip.toFixed(2)}</span>
-                  </p>
-                  <p
-                    id="myTotalTaxTip"
-                    className="mt-1.5 flex justify-between border-t border-dashed border-gray-300 pt-1.5 text-sm"
-                  >
-                    <span>Total + Tip + Tax (${myTax.toFixed(2)}):</span>{' '}
-                    <span className="font-bold">
-                      ${myTotalWithTaxAndTip.toFixed(2)}
-                    </span>
-                  </p>
-                </div>
-              </div>
-
-              {/* Brother's share */}
-              <div className="rounded-sm border border-gray-200 bg-gray-50 p-4">
-                <h4 className="mb-2 text-xs font-bold tracking-wider text-gray-500 uppercase">
-                  Brother&apos;s Share
-                </h4>
-                <div className="space-y-1.5">
-                  <p
-                    id="brotherTotal"
-                    className="flex justify-between text-sm font-semibold"
-                  >
-                    <span>Brother&apos;s Total:</span>{' '}
-                    <span>${brotherSubtotal.toFixed(2)}</span>
-                  </p>
-                  <p
-                    id="brotherTotalTip"
-                    className="flex justify-between text-sm text-gray-500"
-                  >
-                    <span>Total + Tip (${brotherTip.toFixed(2)}):</span>{' '}
-                    <span>${brotherTotalWithTip.toFixed(2)}</span>
-                  </p>
-                  <p
-                    id="brotherTotalTaxTip"
-                    className="mt-1.5 flex justify-between border-t border-dashed border-gray-300 pt-1.5 text-sm"
-                  >
-                    <span>Total + Tip + Tax (${brotherTax.toFixed(2)}):</span>{' '}
-                    <span className="font-bold">
-                      ${brotherTotalWithTaxAndTip.toFixed(2)}
-                    </span>
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            {/* Grand Total */}
-            <div className="mt-4 rounded-sm border border-gray-200 bg-gray-100 p-4 text-center">
-              <p id="grandTotal" className="text-lg font-bold">
-                Grand Total: ${grandTotalCombined.toFixed(2)}
-              </p>
-            </div>
-          </div>
+        <p className="helper-text" id="dinner-rates">
+          6% tax on items. 20% group tip, split equally.
+        </p>
+        {groupError && (
+          <p className="error" id="group-error" role="alert">
+            {groupError}
+          </p>
         )}
-      </Section>
-    </div>
+        <div className="dinner-items">
+          {persons.map((person) => (
+            <section key={person.key} aria-labelledby={`${person.key}-heading`}>
+              <h2 id={`${person.key}-heading`} className="section-title">
+                {person.title}
+              </h2>
+              <form
+                className="item-form"
+                onSubmit={(event) => addItem(event, person.key)}
+              >
+                <div className="field">
+                  <label htmlFor={`${person.key}ItemPrice`}>Item price</label>
+                  <input
+                    className="input"
+                    id={`${person.key}ItemPrice`}
+                    type="number"
+                    inputMode="decimal"
+                    min="0.01"
+                    step="0.01"
+                    required
+                    placeholder="0.00"
+                    value={prices[person.key]}
+                    aria-invalid={!!errors[person.key]}
+                    aria-describedby={
+                      errors[person.key] ? `${person.key}-error` : undefined
+                    }
+                    onChange={(event) => {
+                      setPrices((previous) => ({
+                        ...previous,
+                        [person.key]: event.target.value,
+                      }));
+                      setErrors((previous) => ({
+                        ...previous,
+                        [person.key]: '',
+                      }));
+                    }}
+                  />
+                </div>
+                <Button
+                  type="submit"
+                  variant="secondary"
+                  aria-label={`Add ${person.key === 'my' ? 'my' : "brother's"} item`}
+                >
+                  Add item
+                </Button>
+              </form>
+              {errors[person.key] && (
+                <p className="error" id={`${person.key}-error`} role="alert">
+                  {errors[person.key]}
+                </p>
+              )}
+              <ul className="item-list" aria-label={person.title}>
+                {items[person.key].map((item) => (
+                  <li key={item.id}>
+                    <span>{currency(item.price)}</span>
+                    <Button
+                      variant="ghost"
+                      className="button-icon button-danger"
+                      aria-label={`Remove ${currency(item.price)} ${person.key === 'my' ? 'from my items' : "from brother's items"}`}
+                      onClick={() =>
+                        setItems((previous) => ({
+                          ...previous,
+                          [person.key]: previous[person.key].filter(
+                            (current) => current.id !== item.id
+                          ),
+                        }))
+                      }
+                    >
+                      <ToolIcon name="close" />
+                    </Button>
+                  </li>
+                ))}
+                {items[person.key].length === 0 && (
+                  <li className="empty-list">Add an item above.</li>
+                )}
+              </ul>
+            </section>
+          ))}
+        </div>
+      </div>
+      {valid && (
+        <section className="totals" aria-labelledby="totals-heading">
+          <div className="section-heading">
+            <h2 id="totals-heading" className="section-title">
+              Totals
+            </h2>
+            <CopyButton
+              text={breakdown}
+              label="Copy breakdown"
+              key={breakdown}
+            />
+          </div>
+          <div className="share-grid">
+            {persons.map((person) => (
+              <div key={person.key}>
+                <h3 className="section-title">
+                  {person.key === 'my' ? 'My share' : "Brother's share"}
+                </h3>
+                <dl>
+                  <div>
+                    <dt>Items</dt>
+                    <dd>{currency(person.subtotal)}</dd>
+                  </div>
+                  <div>
+                    <dt>Tax</dt>
+                    <dd>{currency(person.tax)}</dd>
+                  </div>
+                  <div>
+                    <dt>Tip</dt>
+                    <dd>{currency(tip)}</dd>
+                  </div>
+                  <div className="share-total">
+                    <dt>Total</dt>
+                    <dd>{currency(person.total)}</dd>
+                  </div>
+                </dl>
+              </div>
+            ))}
+          </div>
+          <div className="result combined-total" role="status">
+            <span className="result-label">Combined total</span>
+            <span className="result-value">{currency(combined)}</span>
+          </div>
+        </section>
+      )}
+    </Section>
   );
 }
