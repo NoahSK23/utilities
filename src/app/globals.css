@@ -104,12 +104,14 @@
 }
 .sidebar {
   position: fixed;
-  inset: 0 auto 0 0;
+  inset: 0 auto auto 0;
   z-index: 20;
   display: flex;
   width: var(--sidebar-width);
+  height: 100dvh;
   flex-direction: column;
   padding: 32px 16px 20px;
+  overflow-y: auto;
   border-right: 1px solid var(--line);
   background: var(--surface);
 }
@@ -714,7 +716,9 @@
     position: sticky;
     inset: 0 0 auto;
     width: 100%;
+    height: auto;
     padding: 12px 20px;
+    overflow-y: visible;
     border-right: 0;
     border-bottom: 1px solid var(--line);
   }
