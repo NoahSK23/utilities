@@ -36,6 +36,9 @@ jobs:
           node-version-file: '.nvmrc'
           cache: true
           require-lockfile: true
+      - name: Check formatting
+        if: matrix.check == 'lint'
+        run: pnpm format
       - name: Run ${{ matrix.check }}
         run: pnpm run ${{ matrix.check }}
 
