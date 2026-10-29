@@ -12,6 +12,9 @@ export type IconName =
   | 'close'
   | 'copy'
   | 'check'
+  | 'sun'
+  | 'monitor'
+  | 'moon'
   | 'external';
 
 export default function ToolIcon({
@@ -67,6 +70,19 @@ export default function ToolIcon({
       </>
     ),
     check: <path d="m5 12 4 4L19 6" />,
+    sun: (
+      <>
+        <circle cx="12" cy="12" r="4" />
+        <path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5" />
+      </>
+    ),
+    monitor: (
+      <>
+        <rect x="3" y="4" width="18" height="13" rx="2" />
+        <path d="M12 17v4m-4 0h8" />
+      </>
+    ),
+    moon: <path d="M20.9 13.3A9 9 0 0 1 10.7 3.1a9 9 0 1 0 10.2 10.2Z" />,
     external: (
       <path d="M14 3h7v7m0-7L10 14m-1-9H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-4" />
     ),

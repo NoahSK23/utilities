@@ -1,6 +1,7 @@
 import Footer from '@/components/footer';
 import NavBar from '@/components/navbar';
 import { createSEOMetadata } from '@/lib/create-seo-metadata';
+import { themeScript } from '@/lib/theme';
 import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 import './globals.css';
@@ -31,7 +32,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${publicSans.variable} ${geistMono.variable}`}>
+    <html
+      lang="en"
+      className={`${publicSans.variable} ${geistMono.variable}`}
+      // The theme script sets data-theme before hydration, so this attribute
+      // can differ from the server HTML.
+      suppressHydrationWarning
+    >
+      <head>
+        <script>{themeScript}</script>
+      </head>
       <body>
         <a className="skip-link" href="#main-content">
           Skip to content

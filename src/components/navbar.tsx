@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import { GithubSolid } from './icons';
+import ThemeSlider from './theme-slider';
 import ToolIcon, { type IconName } from './tool-icon';
 
 export default function Navbar() {
@@ -87,7 +88,7 @@ export default function Navbar() {
       >
         <div className="nav-tools">{links.map(navLink)}</div>
         <div className="nav-secondary">
-          {navLink({ name: 'Browser check', href: '/hello', icon: 'browser' })}
+          <ThemeSlider />
           <a
             className="nav-link"
             href="https://github.com/noahsk23/utilities"

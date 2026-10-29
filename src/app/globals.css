@@ -20,7 +20,7 @@
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme='light']) {
     color-scheme: dark;
     --canvas: #000000;
     --surface: #0e0e0e;
@@ -32,6 +32,19 @@
     --accent-soft: #1a1a1a;
     --danger: #ffa4a4;
   }
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --canvas: #000000;
+  --surface: #0e0e0e;
+  --ink: #ededed;
+  --muted: #a3a3a3;
+  --line: #2c2c2c;
+  --accent: #9ab5ff;
+  --accent-hover: #b6caff;
+  --accent-soft: #1a1a1a;
+  --danger: #ffa4a4;
 }
 
 @layer base {
@@ -188,6 +201,12 @@
 .menu-toggle {
   display: none !important;
 }
+.theme-setting {
+  width: fit-content;
+  margin: 0 12px 16px;
+  padding: 0;
+  border: 0;
+}
 .workspace {
   display: flex;
   min-height: 100svh;
@@ -343,11 +362,11 @@
   background: var(--surface);
   content: '';
   pointer-events: none;
-  transform: translateX(0);
+  transform: translateX(var(--selection-offset, 0px));
   transition: transform 240ms cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 .segmented-control:has(.segmented-option:last-child input:checked)::before {
-  transform: translateX(calc(100% + 4px));
+  transform: translateX(var(--selection-offset, calc(100% + 4px)));
 }
 .segmented-option {
   position: relative;
@@ -378,6 +397,38 @@
   width: 1px;
   height: 1px;
   opacity: 0;
+}
+.theme-control {
+  /* Match the theme applied before paint, without waiting for hydration. */
+  --selection-offset: calc(100% + 4px);
+  width: 134px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+.theme-control::before {
+  width: calc((100% - 16px) / 3);
+}
+:root[data-theme='light'] .theme-control {
+  --selection-offset: 0px;
+}
+:root[data-theme='dark'] .theme-control {
+  --selection-offset: calc(200% + 8px);
+}
+.theme-option {
+  min-height: 30px;
+  padding: 6px;
+}
+.theme-option:has(input:checked) {
+  color: var(--muted);
+}
+:root[data-theme='light'] .theme-option:has(input[value='light']),
+:root[data-theme='dark'] .theme-option:has(input[value='dark']),
+:root:not([data-theme='light'], [data-theme='dark'])
+  .theme-option:has(input[value='system']) {
+  color: var(--accent);
+}
+.theme-option svg {
+  width: 16px;
+  height: 16px;
 }
 .input {
   width: 100%;
