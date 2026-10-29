@@ -1,24 +1,19 @@
+import { tools } from '@/lib/tools';
 import Link from 'next/link';
+import ToolIcon from './tool-icon';
 
-export default function FeaturedGrid({
-  tool,
-  description,
-  link,
-}: {
-  tool: string;
-  description: string;
-  link: string;
-}) {
+export default function FeaturedGrid() {
   return (
-    <Link
-      href={link}
-      key={tool}
-      className="group rounded-xl bg-white p-6 shadow-sm transition-all hover:translate-y-[-5px] hover:transform hover:bg-gray-100 hover:shadow-md dark:bg-gray-800 dark:hover:bg-gray-700"
-    >
-      <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
-        {tool}
-      </h3>
-      <p className="mt-2 text-gray-600 dark:text-gray-300">{description}</p>
-    </Link>
+    <div className="tool-grid">
+      {tools.map((tool) => (
+        <Link href={tool.href} className="tool-link" key={tool.href}>
+          <span className="tool-link-icon">
+            <ToolIcon name={tool.icon} />
+          </span>
+          <span>{tool.name}</span>
+          <ToolIcon name="chevron" className="tool-chevron" />
+        </Link>
+      ))}
+    </div>
   );
 }

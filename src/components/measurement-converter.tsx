@@ -1,115 +1,83 @@
 'use client';
 
 import { useState } from 'react';
-import Button from './button';
+import Result from './result';
 import Section from './section';
 
 export default function MeasurementConverter() {
-  const [answer, setAnswer] = useState<string>();
-  const [conversionType, setConversionType] = useState<'cm' | 'inches'>('cm');
-
-  function convertToFeetAndInches(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    const formData = new FormData(e.currentTarget);
-    const inputVal = formData.get('value') as string;
-    const value = parseFloat(inputVal);
-    if (isNaN(value) || value <= 0 || inputVal === '') {
-      setAnswer('Please enter a valid number');
-      return;
-    }
-    if (conversionType === 'cm') {
-      // Convert centimeters to feet and inches
-      const feet = Math.floor(value / 30.48);
-      const inches = (value / 30.48 - feet) * 12;
-      const roundedInches = Math.round(inches);
-      const roundedToTwoDecimalPlaces = Math.round(inches * 100) / 100;
-      setAnswer(
-        `${feet} feet and ${roundedInches} inches (${roundedToTwoDecimalPlaces} inches)`
-      );
-    } else {
-      // Convert inches to feet and inches
-      const feet = Math.floor(value / 12);
-      const remainderInches = Math.round((value - feet * 12) * 100) / 100;
-      setAnswer(`${feet} feet and ${remainderInches} inches`);
-    }
-  }
+  const [unit, setUnit] = useState('cm');
+  const [value, setValue] = useState('');
+  const number = Number(value);
+  const hasValue = value.trim() !== '';
+  const totalInches =
+    Math.round((unit === 'cm' ? number / 2.54 : number) * 100) / 100;
+  const feet = Math.floor(totalInches / 12);
+  const inches = Math.round((totalInches - feet * 12) * 100) / 100;
+  const error = !hasValue
+    ? ''
+    : !Number.isFinite(number) || number < 0
+      ? 'Enter a measurement of zero or more.'
+      : !Number.isFinite(totalInches)
+        ? 'Enter a smaller measurement.'
+        : '';
+  const result =
+    hasValue && !error
+      ? {
+          value: `${feet.toLocaleString('en-US')} ft ${inches} in`,
+          detail: `${number.toLocaleString('en-US')} ${unit === 'cm' ? 'cm' : 'in'}`,
+        }
+      : null;
 
   return (
-    <div className="p-4">
-      <h1 className="mb-2 text-center text-3xl font-bold">
-        {conversionType === 'cm'
-          ? 'CM to Feet and Inches'
-          : 'Inches to Feet and Inches'}
-      </h1>
-      <Section>
-        <p className="mb-2 text-center text-xl">
-          Convert measurements to feet and inches.
-        </p>
-        <form onSubmit={convertToFeetAndInches} className="mb-3">
-          <div className="mb-2 flex gap-4">
-            <label className="inline-flex items-center">
-              <input
-                type="radio"
-                name="conversionType"
-                value="cm"
-                checked={conversionType === 'cm'}
-                onChange={(e) => {
-                  setConversionType(e.target.value as 'cm' | 'inches');
-                  setAnswer('');
-                }}
-                className="form-radio"
-              />
-              <span className="ml-2">Centimeters</span>
-            </label>
-            <label className="inline-flex items-center">
-              <input
-                type="radio"
-                name="conversionType"
-                value="inches"
-                checked={conversionType === 'inches'}
-                onChange={(e) => {
-                  setConversionType(e.target.value as 'cm' | 'inches');
-                  setAnswer('');
-                }}
-                className="form-radio"
-              />
-              <span className="ml-2">Inches</span>
-            </label>
+    <Section>
+      <div className="form-stack">
+        <fieldset className="segmented-field">
+          <legend>Convert from</legend>
+          <div className="segmented-control">
+            {[
+              { value: 'cm', label: 'Centimeters' },
+              { value: 'inches', label: 'Inches' },
+            ].map((option) => (
+              <label className="segmented-option" key={option.value}>
+                <input
+                  type="radio"
+                  name="conversionType"
+                  value={option.value}
+                  checked={unit === option.value}
+                  onChange={() => setUnit(option.value)}
+                />
+                {option.label}
+              </label>
+            ))}
           </div>
-          <label
-            className="block text-sm font-medium text-gray-700"
-            htmlFor="value"
-          >
-            {conversionType === 'cm' ? 'Centimeters:' : 'Inches:'}
-          </label>
-          <input
-            type="number"
-            min="0"
-            step="0.01"
-            id="value"
-            name="value"
-            required
-            className="focus:shadow-outline mb-3 w-full appearance-none rounded-sm border px-3 py-2 leading-tight text-neutral-700 shadow-sm focus:outline-hidden"
-            placeholder={conversionType === 'cm' ? 'Centimeters' : 'Inches'}
-          />
-          <div className="mb-3">
-            <Button type="submit" className="w-fit">
-              Convert
-            </Button>
+        </fieldset>
+        <div className="field">
+          <label htmlFor="measurement">Measurement</label>
+          <div className="input-with-unit">
+            <input
+              id="measurement"
+              name="value"
+              className="input"
+              type="number"
+              inputMode="decimal"
+              min="0"
+              step="any"
+              placeholder="0"
+              value={value}
+              aria-invalid={!!error}
+              aria-describedby={error ? 'measurement-error' : undefined}
+              onChange={(event) => setValue(event.target.value)}
+            />
+            <span className="input-unit">{unit === 'cm' ? 'cm' : 'in'}</span>
           </div>
-        </form>
-        {answer && answer !== 'Please enter a valid number' ? (
-          <div className="result mt-3">
-            <strong>Result:</strong>{' '}
-            <span className="text-green-600">{answer}</span>
-          </div>
-        ) : answer === 'Please enter a valid number' ? (
-          <div className="result mt-3">
-            <strong className="text-red-500">Error:</strong>{' '}
-            <span className="text-red-500">{answer}</span>
-          </div>
-        ) : null}
-      </Section>
-    </div>
+          {error && (
+            <p className="error" id="measurement-error" role="alert">
+              {error}
+            </p>
+          )}
+        </div>
+      </div>
+      {result && <Result detail={result.detail}>{result.value}</Result>}
+    </Section>
   );
 }

@@ -1,100 +1,85 @@
 'use client';
+
 import { useState } from 'react';
-import Button from './button';
+import Result from './result';
 import Section from './section';
+
 export default function StorageConverter() {
-  const [result, setResult] = useState('');
-  const [error, setError] = useState(false);
-
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setError(false);
-
-    const formData = new FormData(e.currentTarget);
-    const storage = formData.get('storage') as string;
-    const conversionType = formData.get('conversionType') as string;
-
-    console.log(storage, conversionType);
-
-    const value = parseFloat(storage);
-    if (isNaN(value)) {
-      setError(true);
-      setResult('Please enter a valid number');
-      return;
-    }
-
-    if (conversionType === 'gbToGib') {
-      setResult(
-        `${value} GB is approximately ${(value * 0.931323).toFixed(2)} GiB`
-      );
-    } else {
-      setResult(
-        `${value} GiB is approximately ${(value / 0.931323).toFixed(2)} GB`
-      );
-    }
-  };
+  const [direction, setDirection] = useState('gibToGb');
+  const [value, setValue] = useState('');
+  const from = direction === 'gibToGb' ? 'GiB' : 'GB';
+  const to = direction === 'gibToGb' ? 'GB' : 'GiB';
+  const number = Number(value);
+  const hasValue = value.trim() !== '';
+  const converted =
+    direction === 'gibToGb'
+      ? number * (2 ** 30 / 10 ** 9)
+      : number * (10 ** 9 / 2 ** 30);
+  const error = !hasValue
+    ? ''
+    : !Number.isFinite(number) || number < 0
+      ? 'Enter a storage size of zero or more.'
+      : !Number.isFinite(converted)
+        ? 'Enter a smaller storage size.'
+        : '';
+  const result =
+    hasValue && !error
+      ? {
+          value: `${converted.toLocaleString('en-US', { maximumFractionDigits: 2 })} ${to}`,
+          detail: `${number.toLocaleString('en-US')} ${from}`,
+        }
+      : null;
 
   return (
-    <div className="p-4">
-      <Section>
-        <p className="mb-2 text-center text-xl">
-          Windows measures storage differently (Base 2) than macOS and Linux
-          (Base 10). This can convert between the two.
-        </p>
-        <form onSubmit={handleSubmit} className="mb-3">
-          <div className="mb-2 flex flex-col flex-nowrap gap-6 sm:flex-row">
-            <label className="inline-flex items-center">
-              <input
-                type="radio"
-                name="conversionType"
-                id="conversionTypeGbToGib"
-                value="gibToGb"
-                defaultChecked
-                className="form-radio"
-              />
-              <span className="ml-2">
-                Convert from Base 2 (GiB) to Base 10 (GB)
-              </span>
-            </label>
-            <label className="inline-flex items-center">
-              <input
-                type="radio"
-                name="conversionType"
-                id="conversionTypeGibToGb"
-                value="gbToGib"
-                className="form-radio"
-              />
-              <span className="ml-2">
-                Convert from Base 10 (GB) to Base 2 (GiB)
-              </span>
-            </label>
+    <Section>
+      <div className="form-stack">
+        <fieldset className="segmented-field">
+          <legend>Conversion</legend>
+          <div className="segmented-control">
+            {[
+              { value: 'gibToGb', label: 'GiB to GB' },
+              { value: 'gbToGib', label: 'GB to GiB' },
+            ].map((option) => (
+              <label className="segmented-option" key={option.value}>
+                <input
+                  type="radio"
+                  name="conversionType"
+                  value={option.value}
+                  checked={direction === option.value}
+                  onChange={() => setDirection(option.value)}
+                />
+                {option.label}
+              </label>
+            ))}
           </div>
-          <input
-            type="number"
-            min="0"
-            step="0.01"
-            name="storage"
-            id="storage"
-            placeholder="Enter storage size"
-            required
-            className="focus:shadow-outline mb-3 w-full appearance-none rounded-sm border px-3 py-2 leading-tight text-neutral-700 shadow-sm focus:outline-hidden"
-          />
-          <div className="mb-3">
-            <Button type="submit">Convert</Button>
+        </fieldset>
+        <div className="field">
+          <label htmlFor="storage">Storage size</label>
+          <div className="input-with-unit">
+            <input
+              className="input"
+              id="storage"
+              name="storage"
+              type="number"
+              inputMode="decimal"
+              min="0"
+              step="any"
+              placeholder="0"
+              value={value}
+              aria-invalid={!!error}
+              aria-describedby={error ? 'storage-error' : undefined}
+              onChange={(event) => setValue(event.target.value)}
+            />
+            <span className="input-unit">{from}</span>
           </div>
-        </form>
-        {result && !error ? (
-          <div className="result mt-3">
-            <strong>Result:</strong>{' '}
-            <span className="text-green-600">{result}</span>
-          </div>
-        ) : error ? (
-          <div className="result mt-3">
-            <strong className="text-red-500">Error:</strong>{' '}
-            <span className="text-red-500">Please enter a valid number</span>
-          </div>
-        ) : null}
-      </Section>
-    </div>
+          {error && (
+            <p className="error" id="storage-error" role="alert">
+              {error}
+            </p>
+          )}
+        </div>
+      </div>
+      {result && <Result detail={result.detail}>{result.value}</Result>}
+    </Section>
   );
 }

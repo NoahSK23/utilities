@@ -1,13 +1,12 @@
-interface Props extends React.HTMLAttributes<HTMLDivElement> {
-  children?: React.ReactNode;
-}
+import type { HTMLAttributes } from 'react';
 
-export default function Section({ children, ...props }: Props) {
+export default function Section({
+  children,
+  className = '',
+  ...props
+}: HTMLAttributes<HTMLElement>) {
   return (
-    <section
-      {...props}
-      className="mx-auto max-w-2xl overflow-hidden rounded-xl bg-white p-6 text-black shadow-2xl md:max-w-3xl"
-    >
+    <section className={`panel ${className}`} {...props}>
       {children}
     </section>
   );
