@@ -78,7 +78,21 @@ export default function Navbar() {
           aria-controls="site-navigation"
           onClick={() => setOpen(!open)}
         >
-          <ToolIcon name={open ? 'close' : 'menu'} />
+          <svg
+            className="menu-toggle-icon"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.65"
+            strokeLinecap="round"
+            aria-hidden="true"
+          >
+            <path className="menu-line menu-line-top" d="M4 12h16" />
+            <path className="menu-line menu-line-middle" d="M4 12h16" />
+            <path className="menu-line menu-line-bottom" d="M4 12h16" />
+          </svg>
         </button>
       </div>
       <nav
@@ -86,19 +100,21 @@ export default function Navbar() {
         aria-label="Main navigation"
         className={`navigation ${open ? 'navigation-open' : ''}`}
       >
-        <div className="nav-tools">{links.map(navLink)}</div>
-        <div className="nav-secondary">
-          <ThemeSlider />
-          <a
-            className="nav-link"
-            href="https://github.com/noahsk23/utilities"
-            target="_blank"
-            rel="noreferrer"
-          >
-            {GithubSolid}
-            <span>Source code</span>
-            <ToolIcon name="external" className="external-icon" />
-          </a>
+        <div className="navigation-content">
+          <div className="nav-tools">{links.map(navLink)}</div>
+          <div className="nav-secondary">
+            <ThemeSlider />
+            <a
+              className="nav-link"
+              href="https://github.com/noahsk23/utilities"
+              target="_blank"
+              rel="noreferrer"
+            >
+              {GithubSolid}
+              <span>Source code</span>
+              <ToolIcon name="external" className="external-icon" />
+            </a>
+          </div>
         </div>
       </nav>
     </aside>
