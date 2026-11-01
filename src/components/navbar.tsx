@@ -11,12 +11,19 @@ import ToolIcon, { type IconName } from './tool-icon';
 export default function Navbar() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const [previousPathname, setPreviousPathname] = useState(pathname);
   const navRef = useRef<HTMLElement>(null);
   const toggleRef = useRef<HTMLButtonElement>(null);
   const links: { name: string; href: string; icon: IconName }[] = [
     { name: 'All tools', href: '/', icon: 'grid' },
     ...tools,
   ];
+
+  // The navbar persists across routes, and Back/Forward do not click its links.
+  if (pathname !== previousPathname) {
+    setPreviousPathname(pathname);
+    setOpen(false);
+  }
 
   useEffect(() => {
     if (!open) return;
@@ -26,14 +33,16 @@ export default function Navbar() {
         toggleRef.current?.focus();
       }
     }
-    function closeOnOutside(event: PointerEvent) {
+    function closeOnOutside(event: Event) {
       if (!navRef.current?.contains(event.target as Node)) setOpen(false);
     }
     document.addEventListener('keydown', closeOnEscape);
     document.addEventListener('pointerdown', closeOnOutside);
+    document.addEventListener('focusin', closeOnOutside);
     return () => {
       document.removeEventListener('keydown', closeOnEscape);
       document.removeEventListener('pointerdown', closeOnOutside);
+      document.removeEventListener('focusin', closeOnOutside);
     };
   }, [open]);
 
@@ -78,7 +87,21 @@ export default function Navbar() {
           aria-controls="site-navigation"
           onClick={() => setOpen(!open)}
         >
-          <ToolIcon name={open ? 'close' : 'menu'} />
+          <svg
+            className="menu-toggle-icon"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.65"
+            strokeLinecap="round"
+            aria-hidden="true"
+          >
+            <path className="menu-line menu-line-top" d="M4 12h16" />
+            <path className="menu-line menu-line-middle" d="M4 12h16" />
+            <path className="menu-line menu-line-bottom" d="M4 12h16" />
+          </svg>
         </button>
       </div>
       <nav
@@ -86,19 +109,21 @@ export default function Navbar() {
         aria-label="Main navigation"
         className={`navigation ${open ? 'navigation-open' : ''}`}
       >
-        <div className="nav-tools">{links.map(navLink)}</div>
-        <div className="nav-secondary">
-          <ThemeSlider />
-          <a
-            className="nav-link"
-            href="https://github.com/noahsk23/utilities"
-            target="_blank"
-            rel="noreferrer"
-          >
-            {GithubSolid}
-            <span>Source code</span>
-            <ToolIcon name="external" className="external-icon" />
-          </a>
+        <div className="navigation-content">
+          <div className="nav-tools">{links.map(navLink)}</div>
+          <div className="nav-secondary">
+            <ThemeSlider />
+            <a
+              className="nav-link"
+              href="https://github.com/noahsk23/utilities"
+              target="_blank"
+              rel="noreferrer"
+            >
+              {GithubSolid}
+              <span>Source code</span>
+              <ToolIcon name="external" className="external-icon" />
+            </a>
+          </div>
         </div>
       </nav>
     </aside>
