@@ -767,6 +767,10 @@
   }
 }
 @media (max-width: 800px) {
+  :root {
+    /* Keep the layout width stable when the open menu hides the scrollbar. */
+    scrollbar-gutter: stable;
+  }
   :root:has(.navigation-open) {
     overflow: hidden;
   }
@@ -818,6 +822,7 @@
     display: grid;
     flex: none;
     grid-template-rows: 0fr;
+    overflow: clip;
     visibility: hidden;
     pointer-events: none;
     transition:
@@ -831,6 +836,9 @@
     transition-delay: 0s;
   }
   .navigation-content {
+    /* Keep the scroller's height out of the animated track, which only clips
+       it, so a scrollbar appears only when the menu exceeds its max-height. */
+    align-self: start;
     min-height: 0;
     gap: 20px;
     max-height: calc(100svh - 82px);
